@@ -1,0 +1,79 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>En-study（エンスタディ）</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-warning">
+        <a href="#" class="navbar-brand"><img src="static/css/en-study.svg" alt="logo"></a>
+        <a href="#" class="navbar-brand">En-study for TOEIC</a>
+        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ml-5">
+                        <a class="nav-link home"  href="/">ホーム</a>    
+                    </li>
+                    <li class="nav-item ml-5">
+                        <a class="nav-link" href="{% url 'study' %}">みんなの勉強法</a>
+                    </li>
+                    <li class="nav-item ml-5">
+                        <a class="nav-link" href="/">質問部屋</a>
+                    </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container m-0">
+            <div class="p-0 col-sm-12 col-md-6 col-lg-1 col-1"></div>
+                <a href="#" class="brand" style="justify-content: center;">En-study for TOEIC
+                </a>
+            <div class="p-0 col-sm-12 col-md-6 col-lg-11 col-11">
+                <ul class="footer_nav_set py-4 px-0">
+                    <div class="row">
+                        <div class="pa-0 col-sm-6 col-md-3 col-lg-3 col-4">
+                            <a href="/">
+                                <li class="footer_nav_item">お問い合わせ</li>
+                            </a>
+                        </div>
+                        <div class="pa-0 col-sm-6 col-md-3 col-lg-3 col-4">
+                            <a href="/">
+                                <li class="footer_nav_item">ご利用規約</li>
+                            </a>
+                        </div>
+                        <div class="pa-0 col-sm-6 col-md-3 col-lg-3 col-4">
+                            <a href="/">
+                                <li class="footer_nav_item">プライバシーポリシー</li>
+                            </a>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+
+        </div>
+        
+    </footer>
+
+    {% block extra_js %}
+    {% endblock %}
+
+</body>
+
+</html>

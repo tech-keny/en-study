@@ -1,0 +1,24 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+
+<div class="">{{post_data.author}}</div>
+    <h2 class="">{{ post_data.title }}</h2>
+    <div class="">{{ post_data.study_time }}</div>
+    <div class="">{{ post_data.level }}</div>
+    <div class="">{{ post_data.textbook }}</div>
+    {% if post_data.image %}
+    <img class="" src="{{ post_data.image.url }}" alt="" />
+    {% endif %}
+    <div class="">{{ post_data.content }}</div>
+    <div class="">{{ post_data.updated }}</div>
+
+{% if user.is_authenticated %}
+    <hr>
+    <div class="d-flex mb-5">
+        <a class="btn btn-warning mr-2" href="{% url 'post_edit' post_data.id %}">編集する</a>
+        <a class="btn btn-danger" href="{% url 'post_delete' post_data.id %}">削除する</a>    
+    </div>
+{% endif %}
+
+{% endblock %}

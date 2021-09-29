@@ -1,0 +1,22 @@
+{% extends "app/base.html" %} {% block content %}
+<a href="{% url 'post_new' %}">
+  <button class="btn btn-primary">投稿する</button>
+</a>
+
+{% for post in post_data %}
+<a href="{% url 'post_detail' post.id %}" >
+  <div class="">
+    <div class="">{{post.author}}</div>
+    <h2 class="">{{ post.title }}</h2>
+    <div class="">{{ post.study_time }}</div>
+    <div class="">{{ post.level }}</div>
+    <div class="">{{ post.textbook }}</div>
+    {% if post.image %}
+    <img class="" src="{{ post.image.url }}" alt="" />
+    {% endif %}
+    <div class="">{{ post.content }}</div>
+    <div class="">{{ post.updated }}</div>
+  </div>
+</a>
+
+{% endfor %} {% endblock %}

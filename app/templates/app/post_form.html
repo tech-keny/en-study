@@ -1,0 +1,34 @@
+{% extends "app/base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="my-4">
+    <h2>投稿</h2>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="formpost">
+        {% render_field form.title class="form-control" placeholder="タイトルを入力" %}
+    </div>
+    <div class="formpost">
+        {% render_field form.study_time class="form-control" placeholder="平均勉強時間/日を入力" %}
+    </div>
+    <div class="formpost">
+        {% render_field form.level class="form-control" placeholder="レベルを入力" %}
+    </div>
+    <div class="formpost">
+        {% render_field form.textbook class="form-control" placeholder="参考書名を入力" %}
+    </div>
+    <div class="formpost">
+        {{ form.image }}
+    </div>
+    <div class="formpost">
+        {% render_field form.content class="form-control" placeholder="勉強法を入力" %}
+    </div>
+    <button class="btn btn-warning" type="submit">投稿する</button>
+</form>
+
+{% endblock %}
+
