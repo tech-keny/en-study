@@ -1,3 +1,9 @@
 {% extends "app/base.html" %} {% block content %}
-<h1>質問部屋</h1>
+{% for question in question_data %}
+    
+      <div class="">{{ question.user }}</div>
+      <div class="">{{ question.content}}</div>
+      <div class="">{{ question.created}}</div>
+      
+{% endfor %}
 {% endblock %}

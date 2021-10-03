@@ -8,3 +8,7 @@ class PostForm(forms.Form):
     textbook = forms.CharField(label="参考書名",max_length=200)
     image = forms.ImageField(label="参考書表紙", required=False)
     content = forms.CharField(label='勉強法', widget=forms.Textarea())
+
+class AskForm(forms.Form):
+    content = forms.CharField(label='質問内容', widget=forms.Textarea())
+

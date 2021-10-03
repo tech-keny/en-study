@@ -1,4 +1,5 @@
 {% extends "app/base.html" %}
+{% load widget_tweaks %}
 
 {% block content %}
 
@@ -8,7 +9,7 @@
     <div class="">{{ post_data.level }}</div>
     <div class="">{{ post_data.textbook }}</div>
     {% if post_data.image %}
-    <img class="" src="{{ post_data.image.url }}" alt="" />
+    <img class="" src="{{ post_data.image.url }}" alt="" style="width:100px; height:100px; object-fit:cover;" />
     {% endif %}
     <div class="">{{ post_data.content }}</div>
     <div class="">{{ post_data.updated }}</div>
@@ -20,5 +21,22 @@
         <a class="btn btn-danger" href="{% url 'post_delete' post_data.id %}">削除する</a>    
     </div>
 {% endif %}
+
+{% for ask in ask_data %}
+<div class="">{{ask.user}}</div>
+<div class="">{{ask.content}}</div>
+<div class="">{{ask.created}}</div>
+
+
+{% endfor %}
+<form method="post">
+    {% csrf_token %}
+    <div class="formpost">
+        {% render_field form.content class="form-control" placeholder="質問内容を入力する" %}
+    </div>
+    
+    <button class="btn btn-warning" type="submit">質問する</button>
+</form>
+
 
 {% endblock %}

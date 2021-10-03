@@ -1,8 +1,9 @@
 from django.forms.fields import ImageField
+from django.urls.conf import path
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from .models import Post
-from .forms import PostForm
+from .models import Post, Ask, Question
+from .forms import PostForm, AskForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class IndexView(View):
@@ -22,8 +23,28 @@ class StudyView(View):
 class PostDetailView(View):
     def get(self, request, *args, **kwargs):
         post_data = Post.objects.get(id=self.kwargs['pk'])
+        ask_data = Ask.objects.filter(user=request.user, post=post_data)
+        form = AskForm(request.POST or None)
         return render(request, 'app/post_detail.html', {
-            'post_data': post_data
+            'post_data': post_data,
+            'ask_data': ask_data,
+            'form': form,
+        })
+
+    def post(self, request, *args, **kwargs):
+        form = AskForm(request.POST or None)
+        post_data = Post.objects.get(id=self.kwargs['pk'])
+
+        if form.is_valid():
+            ask_data = Ask()
+            ask_data.user = request.user
+            ask_data.content = form.cleaned_data['content']
+            ask_data.post = post_data
+            ask_data.save()
+            return redirect('post_detail',self.kwargs['pk'] )
+
+        return render(request, 'app/post_detail.html', {
+            'form': form
         })
 
 class CreatePostView(LoginRequiredMixin, View):
@@ -104,3 +125,14 @@ class PostDeleteView(LoginRequiredMixin, View):
         post_data = Post.objects.get(id=self.kwargs['pk'])
         post_data.delete()
         return redirect('study')
+
+class QuestionView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        question_data = Question.objects.all()
+        return render(request, 'app/question.html', {
+            'question_data': question_data
+        })
+
+    def post(self, request, *args, **kwargs):
+        pass
+

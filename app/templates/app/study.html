@@ -12,7 +12,7 @@
     <div class="">{{ post.level }}</div>
     <div class="">{{ post.textbook }}</div>
     {% if post.image %}
-    <img class="" src="{{ post.image.url }}" alt="" />
+    <img class="" src="{{ post.image.url }}" alt="" style="width:100px; height:100px; object-fit:cover;"/>
     {% endif %}
     <div class="">{{ post.content }}</div>
     <div class="">{{ post.updated }}</div>
