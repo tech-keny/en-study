@@ -1,4 +1,5 @@
 {% load static %}
+{% load widget_tweaks %}    
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -7,27 +8,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
     <title>En-study（エンスタディ）</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark" style="height: 70px !important; background-color: orange ;">
-        <div class="d-flex">
+    <nav class="navbar navbar-expand  navbar-dark flex-column flex-lg-row bd-navbar">
+        <div class="d-flex col-lg-1">
             <a href="#" class="navbar-brand">
             <img src="{% static 'img/en-study.svg' %}" alt="logo" class="ml-2 mr-3">En-study for TOEIC （エンスタディ）
             </a>
         </div>
-        <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ml-auto mr-5">
+        <div class="collapse navbar-collapse col-lg-11">
+            <ul class="navbar-nav ml-auto mr-5 flex-row">
                     <li class="nav-item ml-5" >
-                        <a class="nav-link" href="/">
+                        <a class="nav-link active" href="{% url 'profile' %}">
                             <div class="d-flex">
                                 <img src="{% static 'img/home.svg' %}" class="mr-3">
-                                <p class="pt-3">ホーム</p>
+                                <p class="pt-3"><nobr>ホーム</nobr></p>
                             </div>
                         </a>
                     </li>
@@ -35,7 +33,7 @@
                         <a class="nav-link active" href="{% url 'study' %}">
                             <div class="d-flex">
                                 <img src="{% static 'img/people.svg' %}" class="mr-3">
-                                <p class="pt-3">みんなの勉強法</p>
+                                <p class="pt-3"><nobr>みんなの勉強法</nobr></p>
                             </div>
                         </a>
                     </li>
@@ -43,13 +41,15 @@
                         <a class="nav-link active" href="{% url 'question' %}">
                             <div class="d-flex">
                                 <img src="{% static 'img/question.svg' %}" class="mr-3">
-                                <p class="pt-3">質問部屋</p>
+                                <p class="pt-3"><nobr>質問部屋</nobr></p>
                             </div>
                         </a>
                     </li>
             </ul>
         </div>
     </nav>
+
+
 
     <main>
         <div class="container">
@@ -58,36 +58,40 @@
         </div>
     </main>
 
-    <footer class="footer">
-        <div class="container m-0">
-            <div class="p-0 col-sm-12 col-md-6 col-lg-1 col-1"></div>
-                <a href="#" class="brand" style="justify-content: center;">En-study for TOEIC
-                </a>
-            <div class="p-0 col-sm-12 col-md-6 col-lg-11 col-11">
-                <ul class="footer_nav_set py-4 px-0">
+
+
+    <footer class="footer" style="background-color: orange;">
+        <div class="row justify-content-around">
+            <div class="footer-nav col-sm-10 col-md-8 col-lg-6 col-12">
+                <ul class="footer-set py-4 px-0">
                     <div class="row">
-                        <div class="pa-0 col-sm-6 col-md-3 col-lg-3 col-4">
+                        <div class="col-sm-6 col-md-3 col-lg-3 col-6">
                             <a href="/">
-                                <li class="footer_nav_item">お問い合わせ</li>
+                                <li class="footer-item  text-white"><nobr>En-study for TOEIC</nobr></li>
                             </a>
                         </div>
-                        <div class="pa-0 col-sm-6 col-md-3 col-lg-3 col-4">
+                        <div class="col-sm-6 col-md-3 col-lg-3 col-6">
                             <a href="/">
-                                <li class="footer_nav_item">ご利用規約</li>
+                                <li class="footer-item text-white"><nobr>お問い合わせ</nobr> </li>
                             </a>
                         </div>
-                        <div class="pa-0 col-sm-6 col-md-3 col-lg-3 col-4">
+                        <div class="col-sm-6 col-md-3 col-lg-3 col-6">
                             <a href="/">
-                                <li class="footer_nav_item">プライバシーポリシー</li>
+                                <li class="footer-item  text-white"><nobr>ご利用規約</nobr></li>
+                            </a>
+                        </div>
+                        <div class="col-sm-6 col-md-3 col-lg-3 col-6">
+                            <a href="/">
+                                <li class="footer-item text-white"><nobr>プライバシーポリシー</nobr></li>
                             </a>
                         </div>
                     </div>
                 </ul>
             </div>
-
         </div>
-        
     </footer>
+
+
 
     {% block extra_js %}
     {% endblock %}

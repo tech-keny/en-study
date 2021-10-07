@@ -2,7 +2,10 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+
 }
+
+
 
 body {
 	background: #F1F1F1;
@@ -11,9 +14,13 @@ body {
 	min-height: 100vh;
 }
 
+
+
 main {
 	flex: 1;
 }
+
+
 
 .card-profile {
 	width: 700px;
@@ -22,9 +29,7 @@ main {
 	box-shadow: 0 0.2rem 0.2rem 0 rgba(0, 0, 0, 0.1);
 }
 
-.button {
-	width: 150px;
-}
+
 
 .btn {
 	font-size: 80%;
@@ -94,13 +99,36 @@ main {
 }
 
 /* 9/25 デザイン開始 */
-
-
-
-.navbar-nav .nav-item .nav-link {
-	color: red;
+@media screen and (min-width: 768px) {
+.bd-navbar {
+	position: sticky;
+    top: 0;
+    z-index: 1071;
 }
-.navbar-nav .nav-item.active .nav-link,
-.navbar-nav .nav-item:hover .nav-link {
-	color: pink;
+}
+
+
+@media screen and (max-width: 991.98px) {
+.bd-navbar {
+	padding-right: .5rem;
+	padding-left: .5rem;
+}
+}
+
+.bd-navbar {
+	min-height: 4rem;
+}
+
+@media screen and (max-width: 991.98px) {
+	.flex-md-row {
+		flex-direction: row!important;
+	}
+}
+
+.footer-set {
+	list-style: none !important;
+}
+
+.bd-navbar {
+	background-color: green !important;
 }
