@@ -1,7 +1,121 @@
 {% extends "app/base.html" %} {% block content %}
+{% load static %}
+
 <a href="{% url 'post_new' %}">
-  <button class="btn btn-primary">投稿する</button>
+  <button class="post-btn py-1 ml-auto">投稿する</button>
 </a>
+
+<a href="{% url 'account_logout' %}">
+  <button class="logout-btn py-1 ml-auto">ログアウトする</button>
+</a>
+<a href="{% url 'account_login' %}">
+  <button class="logout-btn py-1 ml-auto">ログインする</button>
+</a>
+<a href="{% url 'account_signup' %}">
+  <button class="logout-btn py-1 ml-auto">サインアップする</button>
+</a>
+
+<div class="search-form">
+    <p class="keyword-text m-0">キーワード検索</p>
+    <div class="search-frame mx-auto">
+        {% csrf_token %}
+        <form action="  " method="post" class="search_container">
+            <input type="text" size="25" name="search" placeholder="例）文法、リスニング、長文">
+            <button class="search-btn mt-2" type="submit"><nobr>検索</nobr></button>  
+        </form>
+    </div>
+    <p class="search-result text-center mt-3">キーワード:　○○○の　検索結果　○○件</p>
+</div>
+
+<div class="category-search mx-auto w-75">
+    <hr>
+    <div class="category-name mb-2"><span class="line">― ― ―分類― ― ―</span></div>
+    <ul class="category-list">
+        <a href="">
+          <li class="category-item">／　単語　</li>
+        </a><a href="">
+          <li class="category-item">／　発音　</li>
+        </a><a href="">
+          <li class="category-item">／　語法　</li>
+        </a><a href="">
+          <li class="category-item">／　短文　</li>
+        </a><a href="">
+          <li class="category-item">／　長文　</li>
+        </a><a href="">
+          <li class="category-item">／　その他　／</li>
+        </a>
+    </ul>
+    <div class="category-name mb-2"><span class="line">― ― ―Part― ― ―</span></div>
+    <ul class="category-list">
+        <a href="">
+          <li class="category-item">／　Par1　</li>
+        </a><a href="">
+          <li class="category-item">／　Part2　</li>
+        </a><a href="">
+          <li class="category-item">／　Part3　</li>
+        </a><a href="">
+          <li class="category-item">／　Part4　</li>
+        </a><a href="">
+          <li class="category-item">／　Part5　</li>
+        </a><a href="">
+          <li class="category-item">／　Part6　</li>
+        </a>
+        </a><a href="">
+          <li class="category-item">／　Part7　／</li>
+        </a>
+      </ul>
+      <div class="category-name mb-2"><span class="line">― ― ―平均勉強時間／日― ― ―</span></div>
+      <ul class="category-list">
+          <a href="">
+            <li class="category-item">／　～10分　</li>
+          </a><a href="">
+            <li class="category-item">／　～30分　</li>
+          </a><a href="">
+            <li class="category-item">／　～1時間　</li>
+          </a><a href="">
+            <li class="category-item">／　～2時間　</li>
+          </a><a href="">
+            <li class="category-item">／　～3時間　</li>
+          </a><a href="">
+            <li class="category-item">／　3時間以上　／</li>
+          </a>
+      </ul>
+      <div class="category-name mb-2"><span class="line">― ― ―レベル― ― ―</span></div>
+      <ul class="category-list">
+          {% for level in level_data %}
+          <a href="{% url 'level' level %}">
+            <li class="category-item">{{level}}</li>
+          </a>
+          {% endfor %}
+      </ul>
+      <hr>
+</div>
+
+<!-- <div class="popular-post ">
+    <div class="popular-frame mx-auto">
+      <a href="/" class="stretched-link">
+        <div class="first-post">
+            <p class="first-name"><span class="rank ml-2">🥇</span>　かなえ　さん</p>
+            <hr>
+            <img src="{% static 'img/phrase.jpg' %}" class="book-img" alt="金のフレーズ">
+            <div class="content-frame">
+                <p class="study-title">1日30分、毎日できる英単語学習</p>
+                <p class="used-book">使用した参考書：</p>
+                <p class="book-title">TOEIC L & R TEST 出る単特急 金のフレーズ</p>
+                <hr>
+                <p class="how-to-study">勉強法</p>
+                <p class="study-content">毎日夜寝る前に、３０分ほどレベル別で赤シートを活用しながら暗記していました。
+                  類義語、派生語なども詳しく載っている.... </p>
+                <div class="good-number">参考になった　125件</div>
+            </div>
+        </div>
+      </a>
+    </div>  -->
+<!-- </div> -->
+
+
+
+
 
 {% for post in post_data %}
 <a href="{% url 'post_detail' post.id %}" >

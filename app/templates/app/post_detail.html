@@ -1,18 +1,52 @@
 {% extends "app/base.html" %}
 {% load widget_tweaks %}
+{% load static %}
+
 
 {% block content %}
 
-<div class="">{{post_data.author}}</div>
-    <h2 class="">{{ post_data.title }}</h2>
-    <div class="">{{ post_data.study_time }}</div>
-    <div class="">{{ post_data.level }}</div>
-    <div class="">{{ post_data.textbook }}</div>
+<a href="{% url 'account_logout' %}">
+    <button class="logout-btn py-1 ml-auto">ログアウトする</button>
+</a>
+<a href="{% url 'account_login' %}">
+    <button class="logout-btn py-1 ml-auto">ログインする</button>
+</a>
+<a href="{% url 'account_signup' %}">
+    <button class="logout-btn py-1 ml-auto">サインアップする</button>
+</a>
+
+
+
+<div class="post-detail-frame mx-auto mt-5">
+    <div class="d-flex">
+        <div class="author pl-5">{{post_data.author}}　さんの投稿</div>
+        <div class="updated ml-5 mt-2">投稿日:　{{ post_data.updated }}</div>
+    </div>
+    <hr>
+    <div class="d-flex">
+        <div class="title mx-auto">{{ post_data.title }}</div>
+        <div class="study-time mr-5 mt-2">{{ post_data.study_time }}分/日</div>
+    </div>
+    <div class="level text-right mr-5">レベル:　{{ post_data.level }}</div>
+    <div class="d-flex">
     {% if post_data.image %}
-    <img class="" src="{{ post_data.image.url }}" alt="" style="width:100px; height:100px; object-fit:cover;" />
+        <img class="image ml-5" src="{{ post_data.image.url }}" alt="" style="width:150px; height:auto; object-fit: contain;" />
+        <div class="ml-5 content-set">
+            <div class="text-book ml-auto mb-3">使用した参考書：<br>{{ post_data.textbook }}</div>
+            <hr>
+            <div class="content ml-auto mb-5">{{ post_data.content }}</div>
+        </div>
+    </div>
+    {% else %}
+        <img class="image" src="{% static 'img/phrase.jpg' %}" alt="" style="width: 150px; height:auto; object-fit: contain;" />
+        <div class="ml-5 content-set">
+            <div class="text-book ml-auto mb-3">使用した参考書：<br>{{ post_data.textbook }}</div>
+            <hr>
+            <div class="content ml-auto mb-5">{{ post_data.content }}</div>
+        </div>
+    </div>
     {% endif %}
-    <div class="">{{ post_data.content }}</div>
-    <div class="">{{ post_data.updated }}</div>
+</div>
 
 {% if user.is_authenticated %}
     <hr>
@@ -20,6 +54,7 @@
         <a class="btn btn-warning mr-2" href="{% url 'post_edit' post_data.id %}">編集する</a>
         <a class="btn btn-danger" href="{% url 'post_delete' post_data.id %}">削除する</a>    
     </div>
+    <a class="btn btn-primary" href="{% url 'post_delete' post_data.id %}">返信する</a>   
 {% endif %}
 
 {% for ask in ask_data %}
@@ -29,6 +64,9 @@
 
 
 {% endfor %}
+
+{% if user.is_authenticated %}
+
 <form method="post">
     {% csrf_token %}
     <div class="formpost">
@@ -37,6 +75,6 @@
     
     <button class="btn btn-warning" type="submit">質問する</button>
 </form>
-
+{% endif %}
 
 {% endblock %}

@@ -2,7 +2,7 @@ from django.forms.fields import ImageField
 from django.urls.conf import path
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from .models import Post, Ask, Question
+from .models import Level, Post, Ask, Question
 from .forms import PostForm, AskForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -16,6 +16,11 @@ class IndexView(View):
 class StudyView(View):
     def get(self, request, *args, **kwargs):
         post_data = Post.objects.order_by("-id")
+        # try:
+        #     level = self.kwargs['level']
+        #     post_data = post_data.filter(level=level)
+        # except:
+        #     pass
         return render(request, 'app/study.html', {
             'post_data': post_data,
         })
@@ -23,7 +28,7 @@ class StudyView(View):
 class PostDetailView(View):
     def get(self, request, *args, **kwargs):
         post_data = Post.objects.get(id=self.kwargs['pk'])
-        ask_data = Ask.objects.filter(user=request.user, post=post_data)
+        ask_data = Ask.objects.filter(post=post_data)
         form = AskForm(request.POST or None)
         return render(request, 'app/post_detail.html', {
             'post_data': post_data,
@@ -63,7 +68,9 @@ class CreatePostView(LoginRequiredMixin, View):
             post_data.author = request.user
             post_data.title = form.cleaned_data['title']
             post_data.study_time = form.cleaned_data['study_time']
-            post_data.level = form.cleaned_data['level']
+            level = form.cleaned_data['level']
+            level_data = Level.objects.get(name=level)
+            post_data.level = level_data
             post_data.textbook = form.cleaned_data['textbook']
             if request.FILES:
                 post_data.image = request.FILES.get('image') 
@@ -101,7 +108,9 @@ class PostEditView(LoginRequiredMixin, View):
             post_data = Post.objects.get(id=self.kwargs['pk'])
             post_data.title = form.cleaned_data['title']
             post_data.study_time = form.cleaned_data['study_time']
-            post_data.level = form.cleaned_data['level']
+            level = form.cleaned_data['level']
+            level_data = Level.objects.get(name=level)
+            post_data.level = level_data
             post_data.title = form.cleaned_data['title']
             post_data.textbook = form.cleaned_data['textbook']
             if request.FILES:
@@ -136,3 +145,10 @@ class QuestionView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         pass
 
+class LevelView(View):
+    def get(self, request, *args, **kwargs):
+        level_data = Level.objects.get(name=self.kwargs['level'])
+        post_data = Post.objects.order_by('-id').filter(level=level_data)
+        return render(request, 'app/study.html', {
+            'post_data': post_data
+        })

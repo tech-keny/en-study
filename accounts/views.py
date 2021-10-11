@@ -4,6 +4,7 @@ from accounts.models import CustomUser
 from accounts.forms import ProfileForm, SignupUserForm
 from django.shortcuts import render, redirect
 from allauth.account import views
+from app.models import Post
 
 
 
@@ -12,9 +13,10 @@ from allauth.account import views
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         user_data = CustomUser.objects.get(id=request.user.id)
-
+        post_data = Post.objects.filter(author=request.user)
         return render(request, 'accounts/profile.html', {
             'user_data': user_data,
+            'post_data': post_data
         })
 
 class ProfileEditView(LoginRequiredMixin, View):

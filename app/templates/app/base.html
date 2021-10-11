@@ -1,5 +1,4 @@
 {% load static %}
-{% load widget_tweaks %}    
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -8,15 +7,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>En-study（エンスタディ）</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand  navbar-dark flex-column flex-lg-row bd-navbar">
+    <nav class="navbar navbar-expand  navbar-dark flex-column flex-lg-row bd-navbar" style="background-color: #FFA500;" >
         <div class="d-flex col-lg-1">
             <a href="#" class="navbar-brand">
-            <img src="{% static 'img/en-study.svg' %}" alt="logo" class="ml-2 mr-3">En-study for TOEIC （エンスタディ）
+            <img src="{% static 'img/en-study.svg' %}" alt="logo" class="ml-2 mr-3">En-study for TOEIC 
             </a>
         </div>
         <div class="collapse navbar-collapse col-lg-11">
@@ -60,19 +59,19 @@
 
 
 
-    <footer class="footer" style="background-color: orange;">
-        <div class="row justify-content-around">
-            <div class="footer-nav col-sm-10 col-md-8 col-lg-6 col-12">
-                <ul class="footer-set py-4 px-0">
+    <footer class="footer w-100">
+        <div class="row justify-content-center m-0 p-0">
+            <div class="footer-nav">
+                <ul class="footer-set px-0">
                     <div class="row">
                         <div class="col-sm-6 col-md-3 col-lg-3 col-6">
                             <a href="/">
-                                <li class="footer-item  text-white"><nobr>En-study for TOEIC</nobr></li>
+                                <li class="footer-item text-white"><img src="{% static 'img/en-study.svg' %}" alt="logo" class="ml-2 mr-3"><nobr>En-study for TOEIC</nobr></li>
                             </a>
                         </div>
                         <div class="col-sm-6 col-md-3 col-lg-3 col-6">
                             <a href="/">
-                                <li class="footer-item text-white"><nobr>お問い合わせ</nobr> </li>
+                                <li class="footer-item text-white"><nobr>お問い合わせ</nobr></li>
                             </a>
                         </div>
                         <div class="col-sm-6 col-md-3 col-lg-3 col-6">
@@ -90,6 +89,11 @@
             </div>
         </div>
     </footer>
+    <div class="copyright">
+        <p class="copyright-set mb-0">
+            <span class="copyright-mark align-text-bottom mr-1">©</span>2021 En-Study for TOEIC
+        </p>
+    </div>
 
 
 
