@@ -6,8 +6,11 @@
 <div class="card card-auth my-5 mx-auto">
     <div class="card-body">
         <h5 class="card-title text-center">サインアップ</h5>
-        <form method="post" class="form-auth">
+        <form method="post" class="form-auth" enctype="multipart/form-data">
             {% csrf_token %}
+            <div class="form-label-group">
+                {% render_field form.image class="form-control" placeholder="プロフィール画像" %}
+            </div>
             <div class="form-label-group form_wrap form_wrap-2">
                 {% render_field form.first_name class="form-control" placeholder="姓" %}
                 {% render_field form.last_name class="form-control" placeholder="名" %}

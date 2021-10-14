@@ -1,4 +1,6 @@
 {% extends "app/base.html" %}
+{% load static %}
+
 
 {% block content %}
 
@@ -7,6 +9,17 @@
         <h5 class="card-title text-center">プロフィール</h5>
         <table class="profile_table mb-4">
             <tbody>
+                <tr>
+                    <th class="header">プロフィール画像</th>
+                    <td class="data">
+                        {% if user_data.image %}
+                        <img class="profile-logo" src="{{ user_data.image.url }}" alt="" style="width:50px; height:50px; object-fit:cover;"/>
+                        {% else %}
+                        <img class="profile-logo" src="{% static 'img/user.png' %}" alt="ゲスト" style="width:50px; height:50px; object-fit:cover;"/>
+                        {% endif %}
+                        
+                    </td>
+                </tr>
                 <tr>
                     <th class="header">名前</th>
                     <td class="data">{{ user_data.first_name }} {{ user_data.last_name }}</td>

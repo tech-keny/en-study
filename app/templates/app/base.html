@@ -21,7 +21,7 @@
         <div class="collapse navbar-collapse col-lg-11">
             <ul class="navbar-nav ml-auto mr-5 flex-row">
                     <li class="nav-item ml-5" >
-                        <a class="nav-link active" href="{% url 'profile' %}">
+                        <a class="nav-link active" href="{% url 'index' %}">
                             <div class="d-flex">
                                 <img src="{% static 'img/home.svg' %}" class="mr-3">
                                 <p class="pt-3"><nobr>ホーム</nobr></p>
@@ -50,55 +50,53 @@
 
 
 
-    <main>
-        <div class="container">
-            {% block content %}
-            {% endblock %}
-        </div>
-    </main>
-
-
-
-    <footer class="footer w-100">
-        <div class="row justify-content-center m-0 p-0">
-            <div class="footer-nav">
-                <ul class="footer-set px-0">
-                    <div class="row">
-                        <div class="col-sm-6 col-md-3 col-lg-3 col-6">
-                            <a href="/">
-                                <li class="footer-item text-white"><img src="{% static 'img/en-study.svg' %}" alt="logo" class="ml-2 mr-3"><nobr>En-study for TOEIC</nobr></li>
-                            </a>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3 col-6">
-                            <a href="/">
-                                <li class="footer-item text-white"><nobr>お問い合わせ</nobr></li>
-                            </a>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3 col-6">
-                            <a href="/">
-                                <li class="footer-item  text-white"><nobr>ご利用規約</nobr></li>
-                            </a>
-                        </div>
-                        <div class="col-sm-6 col-md-3 col-lg-3 col-6">
-                            <a href="/">
-                                <li class="footer-item text-white"><nobr>プライバシーポリシー</nobr></li>
-                            </a>
-                        </div>
-                    </div>
-                </ul>
-            </div>
-        </div>
-    </footer>
-    <div class="copyright">
-        <p class="copyright-set mb-0">
-            <span class="copyright-mark align-text-bottom mr-1">©</span>2021 En-Study for TOEIC
-        </p>
+<main>
+    <div class="container-fluid">
+        {% block content %}
+        {% endblock %}
     </div>
+</main>
 
 
 
-    {% block extra_js %}
-    {% endblock %}
+<footer class="footer w-100">
+    <div class="row justify-content-center m-0 p-0">
+        <div class="footer-nav">
+            <ul class="footer-set my-0">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-3">
+                        <li class="footer-item text-white" id="footer-logo"><img src="{% static 'img/en-study.svg' %}" alt="logo" class="ml-2 mr-3"><nobr>En-study for TOEIC</nobr></li>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3">
+                        <a href="/">
+                            <li class="footer-item text-white"><nobr>お問い合わせ</nobr></li>
+                        </a>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3">
+                        <a href="/">
+                            <li class="footer-item  text-white"><nobr>ご利用規約</nobr></li>
+                        </a>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-3">
+                        <a href="/">
+                            <li class="footer-item text-white"><nobr>プライバシーポリシー</nobr></li>
+                        </a>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </div>
+</footer>
+<div class="copyright">
+    <p class="copyright-set mb-0">
+        <span class="copyright-mark align-text-bottom mr-1">©</span>2021 En-Study for TOEIC
+    </p>
+</div>
+
+
+
+{% block extra_js %}
+{% endblock %}
 
 </body>
 
