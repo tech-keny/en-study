@@ -2,9 +2,13 @@ from django.forms.fields import ImageField
 from django.urls.conf import path
 from django.views.generic import View
 from django.shortcuts import render, redirect
-from .models import Level, Post, Ask, Question
+from django.urls import reverse_lazy
+from .models import Level, Post, Ask, Question,Like
 from .forms import PostForm, AskForm
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 
 class IndexView(View):
     def get(self, request, *args, **kwargs):
@@ -16,6 +20,7 @@ class IndexView(View):
 class StudyView(View):
     def get(self, request, *args, **kwargs):
         post_data = Post.objects.order_by("-id")
+
         # try:
         #     level = self.kwargs['level']
         #     post_data = post_data.filter(level=level)
@@ -49,15 +54,15 @@ class PostDetailView(View):
             return redirect('post_detail',self.kwargs['pk'] )
 
         return render(request, 'app/post_detail.html', {
-            'form': form
+            'form': form,
         })
 
 class CreatePostView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = PostForm(request.POST or None)
-
         return render(request, 'app/post_form.html', {
-            'form': form
+            'form': form,
+            
         })
     
     def post(self, request, *args, **kwargs):
@@ -79,7 +84,7 @@ class CreatePostView(LoginRequiredMixin, View):
             return redirect('study')
 
         return render(request, 'app/post_form.html', {
-            'form': form
+            'form': form,
         })
 
 class PostEditView(LoginRequiredMixin, View):
@@ -152,3 +157,50 @@ class LevelView(View):
         return render(request, 'app/study.html', {
             'post_data': post_data
         })
+
+
+@login_required
+def like(request, *args, **kwargs):
+    post = Post.objects.get(id=kwargs['pk'])
+    is_like = Like.objects.filter(user=request.user).filter(post=post).count()
+    # unlike
+    if is_like > 0:
+        liking = Like.objects.get(post__id=kwargs['pk'], user=request.user)
+        liking.delete()
+        post.like_num -= 1
+        post.save()
+        messages.warning(request, 'いいねを取り消しました')
+        return redirect(reverse_lazy('post_detail', kwargs={'pk': kwargs['pk']}))
+    # like
+    post.like_num += 1
+    post.save()
+    like = Like()
+    like.user = request.user
+    like.post = post
+    like.save()
+    messages.success(request, 'いいね！しました')
+    return HttpResponseRedirect(reverse_lazy('post_detail', kwargs={'pk': kwargs['pk']}))
+
+
+@login_required
+def study_like(request, *args, **kwargs):
+    post = Post.objects.get(id=kwargs['pk'])
+    is_like = Like.objects.filter(user=request.user).filter(post=post).count()
+    # unlike
+    if is_like > 0:
+        liking = Like.objects.get(post__id=kwargs['pk'], user=request.user)
+        liking.delete()
+        post.like_num -= 1
+        post.save()
+        messages.warning(request, 'いいねを取り消しました')
+        return redirect(reverse_lazy('study'))
+    # like
+    post.like_num += 1
+    post.save()
+    like = Like()
+    like.user = request.user
+    like.post = post
+    like.save()
+    messages.success(request, 'いいね！しました')
+    return HttpResponseRedirect(reverse_lazy('study'))
+

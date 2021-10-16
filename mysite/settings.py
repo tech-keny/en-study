@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+# 追加
+from decouple import config
+from dj_database_url import parse as dburl
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +29,7 @@ SECRET_KEY = '*m)!yiplct*m=g(fi65!3^ic8fdu4+prp%z+8(a*(dm61(id1@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -45,7 +48,7 @@ INSTALLED_APPS = [
     'allauth', # 追加
     'allauth.account', # 追加
     'allauth.socialaccount' # 追加
-    'django_cleanup.apps.CleanupConfig',#追加
+    # 'django_cleanup.apps.CleanupConfig',#追加
 ]
 
 MIDDLEWARE = [
@@ -83,11 +86,13 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
+# 追加
+default_dburl = 'sqlite:///' + str(BASE_DIR / "db.sqlite3")
+
+# 変更
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
 }
 
 
@@ -128,6 +133,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+# 追加
+STATIC_ROOT = str(BASE_DIR / 'staticfiles')
 
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'

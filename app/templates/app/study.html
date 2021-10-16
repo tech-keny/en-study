@@ -1,18 +1,35 @@
 {% extends "app/base.html" %} {% block content %}
 {% load static %}
 
-<a href="{% url 'post_new' %}">
-  <button class="btn py-1 ml-auto">投稿する</button>
-</a>
-<a href="{% url 'account_logout' %}">
-  <button class="btn py-1 ml-auto">ログアウトする</button>
-</a>
-<a href="{% url 'account_login' %}">
-  <button class="btn py-1 ml-auto">ログインする</button>
-</a>
-<a href="{% url 'account_signup' %}">
-  <button class="btn py-1 ml-auto">サインアップする</button>
-</a>
+<div class="btnvar">
+  <ul class="btn-list d-flex ml-auto">
+  {% if user.is_authenticated %}
+      <li class="btn-item">
+          <a href="{% url 'account_logout' %}">
+              <button class="btn mr-1">ログアウトする</button>
+          </a>
+      </li>
+      <li class="btn-item">
+          <a href="{% url 'post_new' %}">
+              <button class="btn mr-4">投稿する</button>
+          </a>
+      </li>
+  </ul>
+  {% else %}
+      <li class="btn-item">
+          <a href="{% url 'account_signup' %}">
+              <button class="btn mr-1">新規登録する</button>
+          </a>
+      </li>
+      <li class="btn-item">
+          <a href="{% url 'account_login' %}">
+              <button class="btn mr-4">ログインする</button>
+          </a>
+      </li>
+  </ul>
+  {% endif %}
+</div>
+
 
 <div class="search-form">
     <p class="keyword-text m-0">キーワード検索</p>
@@ -90,46 +107,64 @@
       <hr>
 </div>
 
-<!-- <div class="popular-post ">
-    <div class="popular-frame mx-auto">
-      <a href="/" class="stretched-link">
-        <div class="first-post">
-            <p class="first-name"><span class="rank ml-2">🥇</span>　かなえ　さん</p>
-            <hr>
-            <img src="{% static 'img/phrase.jpg' %}" class="book-img" alt="金のフレーズ">
-            <div class="content-frame">
-                <p class="study-title">1日30分、毎日できる英単語学習</p>
-                <p class="used-book">使用した参考書：</p>
-                <p class="book-title">TOEIC L & R TEST 出る単特急 金のフレーズ</p>
-                <hr>
-                <p class="how-to-study">勉強法</p>
-                <p class="study-content">毎日夜寝る前に、３０分ほどレベル別で赤シートを活用しながら暗記していました。
-                  類義語、派生語なども詳しく載っている.... </p>
-                <div class="good-number">参考になった　125件</div>
-            </div>
-        </div>
-      </a>
-    </div>  -->
-<!-- </div> -->
 
 
 
 
 
 {% for post in post_data %}
-<a href="{% url 'post_detail' post.id %}" >
-  <div class="">
-    <div class="">{{post.author}}</div>
-    <h2 class="">{{ post.title }}</h2>
-    <div class="">{{ post.study_time }}</div>
-    <div class="">{{ post.level }}</div>
-    <div class="">{{ post.textbook }}</div>
-    {% if post.image %}
-    <img class="" src="{{ post.image.url }}" alt="" style="width:100px; height:100px; object-fit:cover;"/>
-    {% endif %}
-    <div class="">{{ post.content }}</div>
-    <div class="">{{ post.updated }}</div>
-  </div>
-</a>
+<div class="study-container mx-auto mt-2 w-100">
+    <a href="{% url 'post_detail' post.id %}" class="study-anchor">
+        <div class="study-frame mx-auto col-sm-12 col-md- col-lg-8 p-0">
+            <div class="frame-top mb-1"></div>
+            <div class="study-author d-flex w-100 pl-5">
+                <div class="icon-frame mt-2 mr-4 mt-3 text-center">
+                    <img src="{{ post.author.icon.url }}" alt="" class="icon my-2 study-icon" style="height: 40px; width: 40px;">
+                </div>
+                <div class="author-name h2 mt-3">
+                    <p class="author">{{post.author.name}}さん</p>
+                </div>
+            </div>
+            <hr class="study-author-line study-line w-100 mt-0">
+            <div class="d-flex study-content w-100 pb-4">
+                <div class="study-list mt-5 ml-3" >
+                    <img src="{{ post.image.url }}" alt="" class="icon study-icon" style="height: 200px; width: auto; object-fit: contain;">
+                </div>
+                <div class="study-list w-100 ml-4">
+                    <div class="d-flex">
+                        <p class="study-item h3">{{ post.title }}</p>
+                        <div class="level_time mr-5">
+                            <p class="study-item">レベル：{{ post.level }}</p>
+                            <p class="study-item">平均勉強時間/日：{{ post.study_time }}</p>
+                        </div>
+                    </div>  
+                    <p class="study-book ">参考書名:{{ post.textbook }}</p>
+                    <hr class="text-bool-line study-line" style="width: 200px;">
+                    <p class="study-content"><span class="how-to-study">勉強法:</span><div class="">{{ post.content }}</p>
+                    <div class="d-flex good-frame mr-2 w-50 ml-auto">
+                        <div class="d-flex justify-content-center align-items-center">
+                        <div class="btn good-button ml-5 mr-5">
+                            <a href="{% url 'study_like' post.id %}">参考になった！</a>
+                        </div>
+                        <div>
+                        {{post.like_num}}件
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+{% endfor %}
 
-{% endfor %} {% endblock %}
+
+
+
+
+
+
+
+
+
+{% endblock %}

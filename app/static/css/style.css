@@ -43,6 +43,7 @@ main {
 	background-color: turquoise;
 	margin-top: 25px;
 	padding: 3px 0;	
+  height: 35px;
 	
 }
 
@@ -89,6 +90,11 @@ main {
 .form-control:focus {
 	box-shadow: none;
 }
+.form-image {
+	height: 50px;
+	padding-top: 6px;
+}
+
 
 .card-auth {
 	width: 400px;
@@ -472,4 +478,44 @@ hr {
 .bottom-set {
 	margin-top: 150px; 
 	margin-bottom: 0 !important;
+}
+
+.study-frame {
+  border: 3px solid turquoise;
+  }
+
+.frame-top {
+  height: 25px;
+  width: 100%;
+  background-color:#afeeee;
+}
+
+
+.icon-frame {
+  border: 2px solid turquoise;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.level_time {
+  margin-left: auto;
+}
+
+.good-button {
+  background-color: #FFA500 !important ;
+  border-color: #FFA500 !important;
+}
+.good_number {
+  margin-top: 25px;
+  font-size: 20px;
+}
+
+.study-anchor {
+  text-decoration: none;
+  color: #333;
+}
+
+.study-anchor:hover {
+  text-decoration: none;
 }

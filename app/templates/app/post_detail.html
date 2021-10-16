@@ -19,6 +19,7 @@
 
 <div class="post-detail-frame mx-auto mt-5">
     <div class="d-flex">
+        <img src="{{ post_data.author.profile.image.url }}" alt="">
         <div class="author pl-5">{{post_data.author}}　さんの投稿</div>
         <div class="updated ml-5 mt-2">投稿日:　{{ post_data.updated }}</div>
     </div>
@@ -48,33 +49,38 @@
     {% endif %}
 </div>
 
+<div class="d-flex justify-content-center align-items-center">
+    <div class="btn good-button ml-5 mr-5">
+        <a href="{% url 'like' post_data.id %}">参考になった！</a>
+    </div>
+    <div>
+    {{post_data.like_num}}件
+    </div>
+</div>
+
+
+
 {% if user.is_authenticated %}
     <hr>
     <div class="d-flex mb-5">
         <a class="btn btn-warning mr-2" href="{% url 'post_edit' post_data.id %}">編集する</a>
         <a class="btn btn-danger" href="{% url 'post_delete' post_data.id %}">削除する</a>    
     </div>
-    <a class="btn btn-primary" href="{% url 'post_delete' post_data.id %}">返信する</a>   
 {% endif %}
 
-{% for ask in ask_data %}
-<div class="">{{ask.user}}</div>
-<div class="">{{ask.content}}</div>
-<div class="">{{ask.created}}</div>
+<h2 class="asking">この投稿への質問</h2>
+{% if not post_data.comments.all %}
+    この投稿への質問はありません。<a href="#">質問する</a>
+{% else %}
+    {% for comment in post_data.comments.all %}
+        {{comment.created}}
+        {{comment.user}}
+        {{comment.content}}
+    {% endfor %}
+<p>質問があります。</p>
 
-
-{% endfor %}
-
-{% if user.is_authenticated %}
-
-<form method="post">
-    {% csrf_token %}
-    <div class="formpost">
-        {% render_field form.content class="form-control" placeholder="質問内容を入力する" %}
-    </div>
-    
-    <button class="btn btn-warning" type="submit">質問する</button>
-</form>
 {% endif %}
+
+
 
 {% endblock %}

@@ -25,10 +25,9 @@ class ProfileEditView(LoginRequiredMixin, View):
         form = ProfileForm(
             request.POST or None,
             initial={
-                'first_name': user_data.first_name,
-                'last_name': user_data.last_name,
+                'name': user_data.name,
                 'department': user_data.department,
-                'image': user_data.image
+                'image': user_data.icon
             }
         )
 
@@ -41,11 +40,10 @@ class ProfileEditView(LoginRequiredMixin, View):
         form = ProfileForm(request.POST or None)
         if form.is_valid():
             user_data = CustomUser.objects.get(id=request.user.id)
-            user_data.first_name = form.cleaned_data['first_name']
-            user_data.last_name = form.cleaned_data['last_name']
+            user_data.name = form.cleaned_data['name']
             user_data.department = form.cleaned_data['department']
-            if request.FILES.get('image'):
-                user_data.image = request.FILES.get('image') #追加
+            if request.FILES.get('icon'):
+                user_data.icon = request.FILES.get('icon') #追加
             user_data.save()
             return redirect('profile')
 
