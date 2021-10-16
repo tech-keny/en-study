@@ -150,13 +150,13 @@ class QuestionView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         pass
 
-class LevelView(View):
-    def get(self, request, *args, **kwargs):
-        level_data = Level.objects.get(name=self.kwargs['level'])
-        post_data = Post.objects.order_by('-id').filter(level=level_data)
-        return render(request, 'app/study.html', {
-            'post_data': post_data
-        })
+# class LevelView(View):
+#     def get(self, request, *args, **kwargs):
+#         level_data = Level.objects.get(name=self.kwargs['level'])
+#         post_data = Post.objects.order_by('-id').filter(level=level_data)
+#         return render(request, 'app/study.html', {
+#             'post_data': post_data
+#         })
 
 
 @login_required
