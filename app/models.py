@@ -4,18 +4,18 @@ from django.db.models.deletion import CASCADE
 from accounts.models import CustomUser
 
 
-# class Level(models.Model):
-#     name = models.CharField("レベル", max_length=50)
+class Level(models.Model):
+    name = models.CharField("レベル", max_length=50)
 
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
 
 class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField("タイトル", max_length=200)
     study_time = models.IntegerField("平均勉強時間")
-    # level = models.ForeignKey(Level, verbose_name='レベル', on_delete=models.CASCADE) # 追加
+    level = models.ForeignKey(Level, verbose_name='レベル', on_delete=models.CASCADE) # 追加
     textbook = models.CharField("参考書名", max_length=200)
     image = models.ImageField(
         upload_to='images', verbose_name='参考書表紙', null=True, blank=True)  

@@ -1,11 +1,10 @@
-# from .models import Level
+from .models import Level
 
 def common(request):
-    # level_data = Level.objects.all()
+    level_data = Level.objects.all()
     
     context = {
-        # 'level_data': level_data,
-        'test': 'test'
+        'level_data': level_data,
 
     }
     return context
