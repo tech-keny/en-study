@@ -4,7 +4,7 @@ from django.views.generic import View
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from .models import Level, Post, Ask, Question,Like
-from .forms import PostForm, AskForm
+# from .forms import PostForm, AskForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
