@@ -1,13 +1,13 @@
 from django import forms
-# from .models import Level
+from .models import Level
 
 
 class PostForm(forms.Form):
-    # level_data = Level.objects.all()
-    # level_choice = {}
-    # for level in level_data:
-    #     level_choice[level] = level
-    # level = forms.ChoiceField(label='レベル', widget=forms.Select, choices=list(level_choice.items())) # 追加
+    level_data = Level.objects.all()
+    level_choice = {}
+    for level in level_data:
+        level_choice[level] = level
+    level = forms.ChoiceField(label='レベル', widget=forms.Select, choices=list(level_choice.items())) # 追加
     title = forms.CharField(max_length=200, label='タイトル')
     study_time = forms.IntegerField(label="平均勉強時間/日")
     textbook = forms.CharField(label="参考書名",max_length=200)
