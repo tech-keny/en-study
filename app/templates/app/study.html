@@ -46,21 +46,13 @@
 <div class="category-search mx-auto w-75">
     <hr>
     <div class="category-name mb-2"><span class="line">― ― ―分類― ― ―</span></div>
-    <ul class="category-list">
-        <a href="">
-          <li class="category-item">／　単語　</li>
-        </a><a href="">
-          <li class="category-item">／　発音　</li>
-        </a><a href="">
-          <li class="category-item">／　語法　</li>
-        </a><a href="">
-          <li class="category-item">／　短文　</li>
-        </a><a href="">
-          <li class="category-item">／　長文　</li>
-        </a><a href="">
-          <li class="category-item">／　その他　／</li>
-        </a>
-    </ul>
+      <ul class="category-list">
+          {% for group in group_data %}
+          <a href="{% url 'group' group %}">
+            <li class="category-item">{{group}}</li>
+          </a>
+          {% endfor %}
+      </ul>
     <div class="category-name mb-2"><span class="line">― ― ―Part― ― ―</span></div>
     <ul class="category-list">
         <a href="">
@@ -78,6 +70,9 @@
         </a>
         </a><a href="">
           <li class="category-item">／　Part7　／</li>
+        </a>
+        </a><a href="">
+          <li class="category-item">／　すべて　／</li>
         </a>
       </ul>
       <div class="category-name mb-2"><span class="line">― ― ―平均勉強時間／日― ― ―</span></div>
