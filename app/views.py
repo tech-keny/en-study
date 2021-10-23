@@ -3,7 +3,7 @@ from django.urls.conf import path
 from django.views.generic import View
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from .models import Level, Post, Ask, Question,Like
+from .models import Level, Post, Ask, Question,Like,Group
 from .forms import PostForm, AskForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -68,6 +68,9 @@ class CreatePostView(LoginRequiredMixin, View):
             post_data.author = request.user
             post_data.title = form.cleaned_data['title']
             post_data.study_time = form.cleaned_data['study_time']
+            group = form.cleaned_data['group']
+            group_data = Group.objects.get(name=group)
+            post_data.group = group_data
             level = form.cleaned_data['level']
             level_data = Level.objects.get(name=level)
             post_data.level = level_data
@@ -91,6 +94,7 @@ class PostEditView(LoginRequiredMixin, View):
                 'title': post_data.title,
                 'study_time': post_data.study_time,
                 'level': post_data.level,
+                'group': post_data.group,
                 'textbook': post_data.textbook,
                 'image': post_data.image,
                 'content': post_data.content,
@@ -108,6 +112,9 @@ class PostEditView(LoginRequiredMixin, View):
             post_data = Post.objects.get(id=self.kwargs['pk'])
             post_data.title = form.cleaned_data['title']
             post_data.study_time = form.cleaned_data['study_time']
+            group = form.cleaned_data['group']
+            group_data = Group.objects.get(name=group)
+            post_data.group = group_data
             level = form.cleaned_data['level']
             level_data = Level.objects.get(name=level)
             post_data.level = level_data
@@ -149,6 +156,13 @@ class LevelView(View):
     def get(self, request, *args, **kwargs):
         level_data = Level.objects.get(name=self.kwargs['level'])
         post_data = Post.objects.order_by('-id').filter(level=level_data)
+        return render(request, 'app/study.html', {
+            'post_data': post_data
+        })
+class GroupView(View):
+    def get(self, request, *args, **kwargs):
+        group_data = Group.objects.get(name=self.kwargs['group'])
+        post_data = Post.objects.order_by('-id').filter(group=group_data)
         return render(request, 'app/study.html', {
             'post_data': post_data
         })
