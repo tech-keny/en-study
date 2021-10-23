@@ -4,6 +4,16 @@ from django.db.models.deletion import CASCADE
 from accounts.models import CustomUser
 
 
+class Part(models.Model):
+    name = models.CharField("Part", max_length=50)
+
+    def __str__(self):
+        return self.name
+class StudyTime(models.Model):
+    name = models.CharField("平均勉強時間/日", max_length=50)
+
+    def __str__(self):
+        return self.name
 class Group(models.Model):
     name = models.CharField("分類", max_length=50)
 
@@ -19,9 +29,10 @@ class Post(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField("タイトル", max_length=200)
-    study_time = models.IntegerField("平均勉強時間")
     level = models.ForeignKey(Level, verbose_name='レベル', on_delete=models.CASCADE) # 追加
     group = models.ForeignKey(Group, verbose_name='分類', on_delete=models.CASCADE) # 追加
+    part = models.ForeignKey(Part, verbose_name='Part', default="",on_delete=models.CASCADE) # 追加
+    study_time= models.ForeignKey(StudyTime, verbose_name='平均勉強時間/日', default="",on_delete=models.CASCADE) # 追加
     textbook = models.CharField("参考書名", max_length=200)
     image = models.ImageField(
         upload_to='images', verbose_name='参考書表紙', null=True, blank=True)  
