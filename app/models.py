@@ -69,7 +69,7 @@ class Question(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name="comments", on_delete=CASCADE)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=1)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
     content = models.TextField(default='ここに入力')
     created = models.DateTimeField("作成日", auto_now_add=True)
     def __str__(self):
