@@ -14,6 +14,7 @@ class StudyTime(models.Model):
 
     def __str__(self):
         return self.name
+        
 class Group(models.Model):
     name = models.CharField("分類", max_length=50)
 

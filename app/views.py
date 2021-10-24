@@ -102,7 +102,6 @@ class PostEditView(LoginRequiredMixin, View):
                 'level': post_data.level,
                 'group': post_data.group,
                 'part': post_data.part,
-                'study_time': post_data.study_time,
                 'textbook': post_data.textbook,
                 'image': post_data.image,
                 'content': post_data.content,

@@ -46,60 +46,38 @@
 <div class="category-search mx-auto w-75">
     <hr>
     <div class="category-name mb-2"><span class="line">― ― ―分類― ― ―</span></div>
-      <ul class="category-list">
-          {% for group in group_data %}
-          <a href="{% url 'group' group %}">
-            <li class="category-item">{{group}}</li>
-          </a>
-          {% endfor %}
-      </ul>
+    <ul class="category-list">
+        {% for group in group_data %}
+        <a href="{% url 'group' group %}">
+          <li class="category-item">{{group}}</li>
+        </a>
+        {% endfor %}
+    </ul>
     <div class="category-name mb-2"><span class="line">― ― ―Part― ― ―</span></div>
     <ul class="category-list">
-        <a href="">
-          <li class="category-item">／　Par1　</li>
-        </a><a href="">
-          <li class="category-item">／　Part2　</li>
-        </a><a href="">
-          <li class="category-item">／　Part3　</li>
-        </a><a href="">
-          <li class="category-item">／　Part4　</li>
-        </a><a href="">
-          <li class="category-item">／　Part5　</li>
-        </a><a href="">
-          <li class="category-item">／　Part6　</li>
+        {% for part in part_data %}
+        <a href="{% url 'part' part %}">
+          <li class="category-item">{{part}}</li>
         </a>
-        </a><a href="">
-          <li class="category-item">／　Part7　／</li>
+        {% endfor %}
+    </ul>
+    <div class="category-name mb-2"><span class="line">― ― ―平均勉強時間／日― ― ―</span></div>
+    <ul class="category-list">
+        {% for study_time in study_time_data %}
+        <a href="{% url 'study_time' study_time %}">
+          <li class="category-item">{{study_time}}</li>
         </a>
-        </a><a href="">
-          <li class="category-item">／　すべて　／</li>
+        {% endfor %}
+    </ul>
+    <div class="category-name mb-2"><span class="line">― ― ―レベル― ― ―</span></div>
+    <ul class="category-list">
+        {% for level in level_data %}
+        <a href="{% url 'level' level %}">
+          <li class="category-item">{{level}}</li>
         </a>
-      </ul>
-      <div class="category-name mb-2"><span class="line">― ― ―平均勉強時間／日― ― ―</span></div>
-      <ul class="category-list">
-          <a href="">
-            <li class="category-item">／　～10分　</li>
-          </a><a href="">
-            <li class="category-item">／　～30分　</li>
-          </a><a href="">
-            <li class="category-item">／　～1時間　</li>
-          </a><a href="">
-            <li class="category-item">／　～2時間　</li>
-          </a><a href="">
-            <li class="category-item">／　～3時間　</li>
-          </a><a href="">
-            <li class="category-item">／　3時間以上　／</li>
-          </a>
-      </ul>
-      <div class="category-name mb-2"><span class="line">― ― ―レベル― ― ―</span></div>
-      <ul class="category-list">
-          {% for level in level_data %}
-          <a href="{% url 'level' level %}">
-            <li class="category-item">{{level}}</li>
-          </a>
-          {% endfor %}
-      </ul>
-      <hr>
+        {% endfor %}
+    </ul>
+    <hr>
 </div>
 
 
