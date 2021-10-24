@@ -17,7 +17,7 @@ class PostForm(forms.Form):
     study_time_choice = {}
     for study_time in study_time_data:
         study_time_choice[study_time] = study_time
-    study_time = forms.ChoiceField(label='レベル', widget=forms.Select, choices=list(study_time_choice.items())) # 追加
+    study_time = forms.ChoiceField(label='平均勉強時間/日', widget=forms.Select, choices=list(study_time_choice.items())) # 追加
     group_data = Group.objects.all()
     group_choice = {}
     for group in group_data:

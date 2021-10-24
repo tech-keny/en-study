@@ -67,7 +67,6 @@ class CreatePostView(LoginRequiredMixin, View):
             post_data = Post()
             post_data.author = request.user
             post_data.title = form.cleaned_data['title']
-            post_data.study_time = form.cleaned_data['study_time']
             group = form.cleaned_data['group']
             group_data = Group.objects.get(name=group)
             post_data.group = group_data
