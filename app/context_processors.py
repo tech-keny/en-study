@@ -10,7 +10,7 @@ def common(request):
         'level_data': level_data,
         'group_data': group_data,
         'part_data': part_data,
-        'study_time':study_time_data
+        'study_time_data':study_time_data
 
     }
     return context
