@@ -1,5 +1,6 @@
 from django import forms
-from .models import Level,Group,Part, StudyTime
+from django.forms import fields, widgets
+from .models import Level,Group,Part, StudyTime,Comment
 
 
 class PostForm(forms.Form):
@@ -30,4 +31,27 @@ class PostForm(forms.Form):
 
 class AskForm(forms.Form):
     content = forms.CharField(label='質問内容', widget=forms.Textarea())
+# class CommentForm(forms.Form):
+#     content = forms.CharField(label='質問内容', widget=forms.Textarea())
 
+# class CommentForm(forms.ModelForm):
+#     comment = forms.CharField(
+#         label='',
+#         widget=forms.Textarea(
+#             attrs={'rows': '3',
+#                   'placeholder': 'ここに入力...'}
+#         ))
+#     class Meta:
+#         model = Comment
+#         fields = ['comment']
+
+class CommentForm(forms.ModelForm):
+    comment = forms.CharField(
+        label='',
+        widget=forms.Textarea(
+            attrs={'rows': '3',
+                  'placeholder': 'ここに入力'}
+        ))
+    class Meta:
+        model = Comment
+        fields = ['comment']

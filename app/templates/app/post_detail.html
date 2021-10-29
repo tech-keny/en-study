@@ -2,7 +2,6 @@
 {% load widget_tweaks %}
 {% load static %}
 
-
 {% block content %}
 
 <a href="{% url 'account_logout' %}">
@@ -70,19 +69,35 @@
     </div>
 {% endif %}
 
-<h2 class="asking">この投稿への質問</h2>
-{% if not post_data.comments.all %}
-    この投稿への質問はありません。<a href="#">質問する</a>
-{% else %}
-    {% for comment in post_data.comments.all %}
-        {{comment.created}}
-        {{comment.user}}
-        {{comment.content}}
-    {% endfor %}
-<p>質問があります。</p>
-
-{% endif %}
-
-
+<div class="row justify-content-center mt-3">
+  <div class="col-md-5 col-sm-12">
+      <h5>Add a Comment!</h5>
+  </div>
+</div>
+<div class="row justify-content-center mt-3 mb-5">
+  <div class="col-md-5 col-sm-12">
+      <form method="POST">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="d-grid gap-2">
+              <button class="btn btn-success mt-3">Submit!</button>
+          </div>
+      </form>
+  </div>
+</div>
+{% for comment in comments %}
+<div class="row justify-content-center mt-3 mb-5 border-bottom">
+  <div class="col-md-5 col-sm-12">
+      <p>
+          <strong>{{ comment.user }}</strong> {{ comment.created }}
+          {% if request.user == comment.user %}
+          <a href="{% url 'comment_delete' post_data.pk comment.pk %}" style="color: #333;">編集する</a>
+          {% endif %}
+      </p>
+      <p>{{ comment.content }}</p>
+  </div>
+</div>
+{% endfor %}
+</div>
 
 {% endblock %}

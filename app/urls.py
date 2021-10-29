@@ -1,6 +1,6 @@
 from django.urls import path
 from app import views
-from .views import like
+from .views import CommentDeleteView, like
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
@@ -8,16 +8,17 @@ urlpatterns = [
     # path('study/level/<str:study_level>/', views.StudyView.as_view(), name='study_level'),
     # path('study/group/<str:study_group>/', views.StudyView.as_view(), name='study_group'),
     path('post/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),
+    # path('comment/<int:post_pk>/', views.comment_create, name='comment_create'),
+    # path('reply/<int:comment_pk>/', views.reply_create, name='reply_create'),
     path('post/new/', views.CreatePostView.as_view(), name='post_new'), 
     path('post/<int:pk>/edit/', views.PostEditView.as_view(), name='post_edit'), 
     path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),
+    path('post/<int:post_pk>/comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete'),
     path('question/', views.QuestionView.as_view(), name='question'),
     path('level/<str:level>/', views.LevelView.as_view(), name='level'), 
     path('group/<str:group>/', views.GroupView.as_view(), name='group'), 
     path('part/<str:part>/', views.PartView.as_view(), name='part'), 
     path('study_time/<str:study_time>/', views.StudyTimeView.as_view(), name='study_time'), 
-    # path('comment/<int:post_pk>/', views.comment_create, name='comment_create'),#コメントの作成
-    # path('reply/<int:comment_pk>/', views.reply_create, name='reply_create'),#コメントへの返信
     path('post/<int:pk>/like/',views.like,name='like'), # 追記
     path('study/<int:pk>/like/',views.study_like,name='study_like'), # 追記
 ]

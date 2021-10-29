@@ -44,13 +44,13 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-class Ask(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    content = models.TextField("質問内容")
-    post = models.ForeignKey(Post,on_delete=models.CASCADE)
-    updated = models.DateTimeField("更新日", auto_now=True)
-    created = models.DateTimeField("作成日", auto_now_add=True)
+# class Ask(models.Model):
+#     user = models.ForeignKey(
+#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     content = models.TextField("質問内容")
+#     post = models.ForeignKey(Post,on_delete=models.CASCADE)
+#     updated = models.DateTimeField("更新日", auto_now=True)
+#     created = models.DateTimeField("作成日", auto_now_add=True)
 
     def __str__(self):
         return self.content
@@ -67,15 +67,12 @@ class Question(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, related_name="comments", on_delete=CASCADE)
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default="")
-    content = models.TextField(default='ここに入力')
+    post = models.ForeignKey(Post, on_delete=CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    content = models.TextField('ここに入力')
+    # parent = models.ForeignKey('self', verbose_name='親コメント', null=True, blank=True, on_delete=models.CASCADE)
     created = models.DateTimeField("作成日", auto_now_add=True)
-    def __str__(self):
-      return '%s - %s' % (self.post.title, self.user)
-
-
+    
 class Like(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='like_user')
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
