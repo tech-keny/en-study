@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.sites', # 追加
     'allauth', # 追加
     'allauth.account', # 追加
-    'allauth.socialaccount' # 追加
+    'allauth.socialaccount', # 追加
+    'crispy_forms',
+    'multiselectfield',
     # 'django_cleanup.apps.CleanupConfig',#追加
 ]
 

@@ -55,7 +55,7 @@
     </ul>
     <div class="category-name mb-2"><span class="line">― ― ―Part― ― ―</span></div>
     <ul class="category-list">
-        {% for part in part_data %}
+        {% for part in part_data.all %}
         <a href="{% url 'part' part %}">
           <li class="category-item">{{part}}</li>
         </a>
@@ -110,6 +110,11 @@
                             <p class="study-item">レベル：{{ post.level }}</p>
                             <p class="study-item">平均勉強時間/日：{{ post.study_time }}</p>
                             <p class="study-item">分類：{{ post.group }}</p>
+                            <p class="study-item">Part:
+                              {% for part in post.part.all %} 
+                              {{ part }}
+                              {% endfor %}
+                            </p>
                         </div>
                     </div>  
                     <p class="study-book ">参考書名:{{ post.textbook }}</p>

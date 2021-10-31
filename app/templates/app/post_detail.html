@@ -1,5 +1,6 @@
 {% extends "app/base.html" %}
 {% load widget_tweaks %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block content %}
@@ -29,7 +30,11 @@
     </div>
     <div class="level text-right mr-5">レベル:　{{ post_data.level }}</div>
     <div class="group text-right mr-5">分類:　{{ post_data.group }}</div>
-    <div class="part text-right mr-5">Part:　{{ post_data.part }}</div>
+    <div class="part text-right mr-5">Part:　
+    {% for part in post_data.part.all %} 
+        {{ part }}
+    {% endfor %}
+    </div>
     <div class="d-flex">
     {% if post_data.image %}
         <img class="image ml-5" src="{{ post_data.image.url }}" alt="" style="width:150px; height:auto; object-fit: contain;" />
@@ -60,8 +65,7 @@
 </div>
 
 
-
-{% if user.is_authenticated %}
+{% if request.user == post_data.author %}
     <hr>
     <div class="d-flex mb-5">
         <a class="btn btn-warning mr-2" href="{% url 'post_edit' post_data.id %}">編集する</a>
@@ -69,35 +73,85 @@
     </div>
 {% endif %}
 
+
+{% for comment in comments %}
+    {% if comment.is_parent %}
+    <div class="row justify-content-center mt-3 mb-5">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <div>
+                <p class="post-text">{{ comment.user }} {{ comment.created }}</p>
+                <div class="mb-3">
+                    {% if request.user == comment.user %}
+                        <a href="{% url 'comment_delete' post_data.pk comment.pk %}" class="edit-color">削除する</a>
+                    {% endif %}
+                </div>
+            </div>
+            <p>{{ comment.content }}</p>
+            <div class="d-flex flex-row">
+            {% if request.user == post_data.author %}
+                <div>
+                    <button class="remove-default-btn"><i class="far fa-comment-dots" onclick="commentReplyToggle('{{ comment.pk }}')">Reply</i></button>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-3 mb-5 d-none" id="{{ comment.pk }}">
+                <div class="col">
+                  <form method="POST" action="{% url 'comment_reply' post_data.pk comment.pk %}">
+                      {% csrf_token %}
+                      <div class="formpost">
+                        {% render_field form.content class="form-control" placeholder="ここに入力" %}
+                      </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success mt-3">Submit!</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% for child_comment in comment.children %}
+    <div class="row justify-content-center mt-3 mb-5 child-comment">
+        <div class="col-md-5 col-sm-12 border-bottom">
+            <div>
+                <p class="post-text">
+                {{ child_comment.user }}{{ child_comment.created }}
+                </p>
+                <div class="mb-3">
+                    {% if request.user == child_comment.user %}
+                        <a href="{% url 'comment_delete' post_data.pk child_comment.pk %}" class="edit-color">削除する</i></a>
+                    {% endif %}
+                </div>
+            </div>
+            <p>{{ child_comment.content }}</p>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endfor %}
+
 <div class="row justify-content-center mt-3">
-  <div class="col-md-5 col-sm-12">
-      <h5>Add a Comment!</h5>
-  </div>
+    <div class="col-md-5 col-sm-12">
+        <h5>Add a Comment!</h5>
+    </div>
 </div>
 <div class="row justify-content-center mt-3 mb-5">
-  <div class="col-md-5 col-sm-12">
-      <form method="POST">
-          {% csrf_token %}
-          {{ form.as_p }}
-          <div class="d-grid gap-2">
-              <button class="btn btn-success mt-3">Submit!</button>
-          </div>
-      </form>
-  </div>
+    <div class="col-md-5 col-sm-12">
+        <form method="POST">
+            {% csrf_token %}
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="formpost">
+                  {% render_field form.content class="form-control" placeholder="ここに入力" %}
+              </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-success mt-3">Submit!</button>
+            </div>
+        </form>
+    </div>
 </div>
-{% for comment in comments %}
-<div class="row justify-content-center mt-3 mb-5 border-bottom">
-  <div class="col-md-5 col-sm-12">
-      <p>
-          <strong>{{ comment.user }}</strong> {{ comment.created }}
-          {% if request.user == comment.user %}
-          <a href="{% url 'comment_delete' post_data.pk comment.pk %}" style="color: #333;">編集する</a>
-          {% endif %}
-      </p>
-      <p>{{ comment.content }}</p>
-  </div>
-</div>
-{% endfor %}
-</div>
+
+  
+    
 
 {% endblock %}

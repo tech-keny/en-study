@@ -1,6 +1,5 @@
 from django import forms
-from django.forms import fields, widgets
-from .models import Level,Group,Part, StudyTime,Comment
+from .models import Level,Group,Part, StudyTime,Comment, Post
 
 
 class PostForm(forms.Form):
@@ -9,8 +8,9 @@ class PostForm(forms.Form):
     for level in level_data:
         level_choice[level] = level
     level = forms.ChoiceField(label='レベル', widget=forms.Select, choices=list(level_choice.items())) # 追加
+    # part = forms.ModelMultipleChoiceField(queryset=Part.objects.all(),label='Part', widget=forms.CheckboxSelectMultiple, ) # 追加
     part_data = Part.objects.all()
-    part_choice = {}
+    part_choice = {}  
     for part in part_data:
         part_choice[part] = part
     part = forms.ChoiceField(label='Part', widget=forms.Select, choices=list(part_choice.items())) # 追加
@@ -29,29 +29,15 @@ class PostForm(forms.Form):
     image = forms.ImageField(label="参考書表紙", required=False)
     content = forms.CharField(label='勉強法', widget=forms.Textarea())
 
-class AskForm(forms.Form):
-    content = forms.CharField(label='質問内容', widget=forms.Textarea())
-# class CommentForm(forms.Form):
-#     content = forms.CharField(label='質問内容', widget=forms.Textarea())
 
-# class CommentForm(forms.ModelForm):
-#     comment = forms.CharField(
-#         label='',
-#         widget=forms.Textarea(
-#             attrs={'rows': '3',
-#                   'placeholder': 'ここに入力...'}
-#         ))
-#     class Meta:
-#         model = Comment
-#         fields = ['comment']
 
 class CommentForm(forms.ModelForm):
-    comment = forms.CharField(
+    content = forms.CharField(
         label='',
         widget=forms.Textarea(
             attrs={'rows': '3',
-                  'placeholder': 'ここに入力'}
+                  'placeholder': 'Say Something...'}
         ))
     class Meta:
         model = Comment
-        fields = ['comment']
+        fields = ['content']

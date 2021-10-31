@@ -6,7 +6,7 @@ from django.views import generic
 from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Comment, Level, Post, Question,Like,Group,Part,StudyTime
-from .forms import PostForm 
+from .forms import PostForm, CommentForm
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -34,7 +34,7 @@ class PostDetailView(View):
         
     def get(self, request, pk , *args, **kwargs):
         post_data = Post.objects.get(id=self.kwargs['pk'])
-        form = CommentForm()
+        form = CommentForm(request.POST or None)
         comments = Comment.objects.filter(post=post_data).order_by('-created')
         return render(request, 'app/post_detail.html', {
             'post_data': post_data,
@@ -61,9 +61,6 @@ class PostDetailView(View):
             'form':form,
             'comments': comments,
         })
-
-
-
 class CreatePostView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = PostForm(request.POST or None)
@@ -72,8 +69,9 @@ class CreatePostView(LoginRequiredMixin, View):
             
         })
     
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs): 
         form = PostForm(request.POST or None)
+    
 
         if form.is_valid():
             post_data = Post()
@@ -101,7 +99,8 @@ class CreatePostView(LoginRequiredMixin, View):
         return render(request, 'app/post_form.html', {
             'form': form,
         })
-  
+
+
 class PostEditView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         post_data = Post.objects.get(id=self.kwargs['pk'])
@@ -167,22 +166,43 @@ class PostDeleteView(LoginRequiredMixin, View):
 
         return redirect('study')
 
-class CommentDeleteView(LoginRequiredMixin, View):
-    def get(self, request, *args, **kwargs):
-        post_data = Post.objects.get(id=self.kwargs['pk'])
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'app/comment_delete.html'
+    def get_success_url(self):
+        pk = self.kwargs['post_pk']
+        return reverse_lazy('post_detail', kwargs={'pk': pk})
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.user
+    # def get(self, request, pk , *args, **kwargs):
+    #     post_data = Post.objects.get(id=self.kwargs['pk'])
+    #     return render(request, 'app/comment_delete.html', {
+    #         'post_data': post_data,
+    #     })
+class CommentReplyView(LoginRequiredMixin, View):
+    def post(self, request, post_pk, pk, *args, **kwargs):
+        post_data = Post.objects.get(pk=post_pk)
+        parent_comment = Comment.objects.get(pk=pk)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.post = post_data
+            comment.parent = parent_comment
+            comment.save()
+        
+            
+            return redirect('post_detail', pk=post_pk)
         comments = Comment.objects.filter(post=post_data).order_by('-created')
-        return render(request, 'app/comment_delete.html', {
+        
+        return render(request, 'app/post_detail.html', {
             'post_data': post_data,
-            'comments':comments
+            'form':form,
+            'comments': comments,
         })
-
-    def post(self, request, *args, **kwargs):
-        post_data = Post.objects.get(id=self.kwargs['pk'])
-        comments = Comment.objects.filter(post=post_data).order_by('-created')
-        comments.delete()
-
-        return redirect('post_detail', self.kwargs['pk'])
-
+        
 
 class QuestionView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -210,7 +230,7 @@ class GroupView(View):
         })
 class PartView(View):
     def get(self, request, *args, **kwargs):
-        part_data = Part.objects.get(name=self.kwargs['part'])
+        part_data = Part.objects.get(name=self.kwargs['part'])  
         post_data = Post.objects.order_by('-id').filter(part=part_data)
         return render(request, 'app/study.html', {
             'post_data': post_data
@@ -268,14 +288,4 @@ def study_like(request, *args, **kwargs):
     like.save()
     messages.success(request, 'いいね！しました')
     return HttpResponseRedirect(reverse_lazy('study'))
-
-# class CreateCommentView(LoginRequiredMixin, CreateView):
-#     model = Comment
-#     form_class = CommentForm
-#     template_name = 'app/comment_form.html'
-#     # fields = '__all__'
-
-
-#     def get_success_url(self):
-#         return reverse_lazy(reverse_lazy('post_detail', kwargs={'pk': self.kwargs['pk']}))
 

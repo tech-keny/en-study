@@ -1,6 +1,6 @@
 from django.urls import path
 from app import views
-from .views import CommentDeleteView, like
+from .views import CommentDeleteView, CommentReplyView, like
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
@@ -8,12 +8,11 @@ urlpatterns = [
     # path('study/level/<str:study_level>/', views.StudyView.as_view(), name='study_level'),
     # path('study/group/<str:study_group>/', views.StudyView.as_view(), name='study_group'),
     path('post/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),
-    # path('comment/<int:post_pk>/', views.comment_create, name='comment_create'),
-    # path('reply/<int:comment_pk>/', views.reply_create, name='reply_create'),
     path('post/new/', views.CreatePostView.as_view(), name='post_new'), 
     path('post/<int:pk>/edit/', views.PostEditView.as_view(), name='post_edit'), 
     path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),
-    path('post/<int:post_pk>/comment/delete/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete'),
+    path('post/<int:post_pk>/comment/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete'),
+    path('post/<int:post_pk>/comment/reply/<int:pk>', CommentReplyView.as_view(), name='comment_reply'),
     path('question/', views.QuestionView.as_view(), name='question'),
     path('level/<str:level>/', views.LevelView.as_view(), name='level'), 
     path('group/<str:group>/', views.GroupView.as_view(), name='group'), 

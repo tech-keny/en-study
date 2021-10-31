@@ -1,19 +1,13 @@
-<!-- {% for ask in ask_data %}
-<div class="">{{ask.user}}</div>
-<div class="">{{ask.content}}</div>
-<div class="">{{ask.created}}</div>
 
 
-{% endfor %}
 
-{% if user.is_authenticated %}
 
-<form method="post">
-    {% csrf_token %}
-    <div class="formpost">
-        {% render_field form.content class="form-control" placeholder="質問内容を入力する" %}
-    </div>
-    
-    <button class="btn btn-warning" type="submit">質問する</button>
-</form>
-    {% endif %} -->
+<label><input type="checkbox" name="part" value="Part1">Part1</label>
+<label><input type="checkbox" name="part" value="Part2">Part2</label>
+<label><input type="checkbox" name="part" value="Part3">Part3 </label>
+<label><input type="checkbox" name="part" value="Part4">Part4</label>
+<label><input type="checkbox" name="part" value="Part5">Part5</label>
+<label><input type="checkbox" name="part" value="Part6">Part6</label>
+<label><input type="checkbox" name="part" value="Part7">Part7</label>
+
+part = request.POST.getlist["part"]
