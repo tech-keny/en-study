@@ -2,8 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models.deletion import CASCADE
 from accounts.models import CustomUser
-from multiselectfield import MultiSelectField
-
+from django.utils import timezone
 
 class Part(models.Model):
     name = models.CharField("Part", max_length=50)

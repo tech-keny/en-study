@@ -1,16 +1,17 @@
+from django.forms.models import ModelForm
 from django.urls.conf import path
-from django.views.generic import View 
+from django.views.generic import View, FormView
 from django import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Comment, Level, Post, Question,Like,Group,Part,StudyTime
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm #PartForm
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, request
 
 class IndexView(View):
     def get(self, request, *args, **kwargs):
@@ -61,6 +62,7 @@ class PostDetailView(View):
             'form':form,
             'comments': comments,
         })
+
 class CreatePostView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = PostForm(request.POST or None)
@@ -70,87 +72,120 @@ class CreatePostView(LoginRequiredMixin, View):
         })
     
     def post(self, request, *args, **kwargs): 
-        form = PostForm(request.POST or None)
+        if request.method == 'POST':
+
+            form = PostForm(request.POST or None)
+            if form.is_valid():
+                post_data = form.save(commit=False)
+                post_data.author = request.user
+                if request.FILES:
+                    post_data.image = request.FILES.get('image') 
+                post_data.save()
+                form.save_m2m()
+                return redirect('study')
+
+            return render(request, 'app/post_form.html', {
+                'form': form,
+            })
+
+
+# class CreatePostView(LoginRequiredMixin, View):
+#     def get(self, request, *args, **kwargs):
+#         form = PostForm(request.POST or None)
+#         return render(request, 'app/post_form.html', {
+#             'form': form,
+            
+#         })
+    
+#     def post(self, request, *args, **kwargs): 
+#         form = PostForm(request.POST or None)
     
 
-        if form.is_valid():
-            post_data = Post()
-            post_data.author = request.user
-            post_data.title = form.cleaned_data['title']
-            group = form.cleaned_data['group']
-            group_data = Group.objects.get(name=group)
-            post_data.group = group_data
-            part = form.cleaned_data['part']
-            part_data = Part.objects.get(name=part)
-            post_data.part = part_data
-            study_time = form.cleaned_data['study_time']
-            study_time_data = StudyTime.objects.get(name=study_time)
-            post_data.study_time = study_time_data
-            level = form.cleaned_data['level']
-            level_data = Level.objects.get(name=level)
-            post_data.level = level_data
-            post_data.textbook = form.cleaned_data['textbook']
-            if request.FILES:
-                post_data.image = request.FILES.get('image') 
-            post_data.content = form.cleaned_data['content']
-            post_data.save()
-            return redirect('study')
+#         if form.is_valid():
+#             post_data = Post()
+#             post_data.author = request.user
+#             post_data.title = form.cleaned_data['title']
+#             group = form.cleaned_data['group']
+#             group_data = Group.objects.get(name=group)
+#             post_data.group = group_data
+#             part = form.cleaned_data['part']
+#             part_data = Part.objects.get(name=part)
+#             post_data.part = part_data
+#             study_time = form.cleaned_data['study_time']
+#             study_time_data = StudyTime.objects.get(name=study_time)
+#             post_data.study_time = study_time_data
+#             level = form.cleaned_data['level']
+#             level_data = Level.objects.get(name=level)
+#             post_data.level = level_data
+#             post_data.textbook = form.cleaned_data['textbook']
+#             if request.FILES:
+#                 post_data.image = request.FILES.get('image') 
+#             post_data.content = form.cleaned_data['content']
+#             post_data.save()
+#             return redirect('study')
 
-        return render(request, 'app/post_form.html', {
-            'form': form,
-        })
+#         return render(request, 'app/post_form.html', {
+#             'form': form,
+#         })
 
-
-class PostEditView(LoginRequiredMixin, View):
-    def get(self, request, *args, **kwargs):
-        post_data = Post.objects.get(id=self.kwargs['pk'])
-        form = PostForm(
-            request.POST or None,
-            initial={
-                'title': post_data.title,
-                'study_time': post_data.study_time,
-                'level': post_data.level,
-                'group': post_data.group,
-                'part': post_data.part,
-                'textbook': post_data.textbook,
-                'image': post_data.image,
-                'content': post_data.content,
-            }
-        )
-
-        return render(request, 'app/post_form.html', {
-            'form': form
-        })
+class PostEditView(LoginRequiredMixin, generic.UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'post_form.html'
     
-    def post(self, request, *args, **kwargs):
-        form = PostForm(request.POST or None)
+    def get_success_url(self):
+        redirect('post_form.html')
 
-        if form.is_valid():
-            post_data = Post.objects.get(id=self.kwargs['pk'])
-            post_data.title = form.cleaned_data['title']
-            group = form.cleaned_data['group']
-            group_data = Group.objects.get(name=group)
-            post_data.group = group_data
-            level = form.cleaned_data['level']
-            level_data = Level.objects.get(name=level)
-            post_data.level = level_data
-            part = form.cleaned_data['part']
-            part_data = Part.objects.get(name=part)
-            post_data.part = part_data
-            study_time = form.cleaned_data['study_time']
-            study_time_data = StudyTime.objects.get(name=study_time)
-            post_data.study_time = study_time_data
-            post_data.title = form.cleaned_data['title']
-            post_data.textbook = form.cleaned_data['textbook']
-            if request.FILES:
-                post_data.image = request.FILES.get('image') 
-            post_data.content = form.cleaned_data['content']
-            post_data.save()
-            return redirect('post_detail', self.kwargs['pk'])
+# class PostEditView(LoginRequiredMixin, generic.UpdateView):
+#     def get(self, request, *args, **kwargs):
+#         post_data = Post.objects.get(id=self.kwargs['pk'])
+#         form = PostForm(
+#             request.POST or None,
+#             initial={
+#                 'title': post_data.title,
+#                 'study_time': post_data.study_time,
+#                 'level': post_data.level,
+#                 'group': post_data.group,
+#                 'part': post_data.part,
+#                 'textbook': post_data.textbook,
+#                 'image': post_data.image,
+#                 'content': post_data.content,
+#             }
+#         )
 
-        return render(request, 'app/post_form.html', {
-            'form': form
-        })
+#         return render(request, 'app/post_form.html', {
+#             'form': form
+#         })
+    
+#     def post(self, request, *args, **kwargs):
+#         form = PostForm(request.POST or None)
+
+#         if form.is_valid():
+#             post_data = Post.objects.get(id=self.kwargs['pk'])
+#             post_data.title = form.cleaned_data['title']
+#             group = form.cleaned_data['group']
+#             group_data = Group.objects.get(name=group)
+#             post_data.group = group_data
+#             level = form.cleaned_data['level']
+#             level_data = Level.objects.get(name=level)
+#             post_data.level = level_data
+#             part = form.cleaned_data['part']
+#             part_data = Part.objects.get(name=part)
+#             post_data.part = part_data
+#             study_time = form.cleaned_data['study_time']
+#             study_time_data = StudyTime.objects.get(name=study_time)
+#             post_data.study_time = study_time_data
+#             post_data.title = form.cleaned_data['title']
+#             post_data.textbook = form.cleaned_data['textbook']
+#             if request.FILES:
+#                 post_data.image = request.FILES.get('image') 
+#             post_data.content = form.cleaned_data['content']
+#             post_data.save()
+#             return redirect('post_detail', self.kwargs['pk'])
+
+#         return render(request, 'app/post_form.html', {
+#             'form': form
+#         })
 
 
 class PostDeleteView(LoginRequiredMixin, View):
