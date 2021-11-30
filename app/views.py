@@ -35,7 +35,7 @@ class PostDetailView(View):
         
     def get(self, request, pk , *args, **kwargs):
         post_data = Post.objects.get(id=self.kwargs['pk'])
-        form = CommentForm(request.POST or None)
+        form = CommentForm(request.POST ,request.FILES or None)
         comments = Comment.objects.filter(post=post_data).order_by('-created')
         return render(request, 'app/post_detail.html', {
             'post_data': post_data,
@@ -65,7 +65,7 @@ class PostDetailView(View):
 
 class CreatePostView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        form = PostForm(request.POST or None)
+        form = PostForm(request.POST ,request.FILES or None)
         return render(request, 'app/post_form.html', {
             'form': form,
             
@@ -74,7 +74,7 @@ class CreatePostView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs): 
         if request.method == 'POST':
 
-            form = PostForm(request.POST or None)
+            form = PostForm(request.POST ,request.FILES or None)
             if form.is_valid():
                 post_data = form.save(commit=False)
                 post_data.author = request.user
@@ -128,15 +128,60 @@ class CreatePostView(LoginRequiredMixin, View):
 #             'form': form,
 #         })
 
-class PostEditView(LoginRequiredMixin, generic.UpdateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'post_form.html'
-    
-    def get_success_url(self):
-        redirect('post_form.html')
 
-# class PostEditView(LoginRequiredMixin, generic.UpdateView):
+class PostEditView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        post_data = Post.objects.get(id=self.kwargs['pk'])  
+        form = PostForm(request.POST ,request.FILES or None, initial={
+                'title': post_data.title,
+                'study_time': post_data.study_time,
+                'level': post_data.level,
+                'group': post_data.group,
+                'textbook': post_data.textbook,
+                'image': post_data.image,
+                'content': post_data.content,
+            }
+        )
+
+        return render(request, 'app/post_form.html', {
+          'form':form,
+        })
+    
+    def post(self, request, *args, **kwargs): 
+        if request.method == 'POST':
+            form = PostForm(request.POST, request.FILES)
+            if form.is_valid():
+                post_data = Post.objects.get(id=self.kwargs['pk'])
+                post_data.title = form.cleaned_data['title']
+                group = form.cleaned_data['group']
+                group_data = Group.objects.get(name=group)
+                post_data.group = group_data
+                level = form.cleaned_data['level']
+                level_data = Level.objects.get(name=level)
+                post_data.level = level_data
+                study_time = form.cleaned_data['study_time']
+                study_time_data = StudyTime.objects.get(name=study_time)
+                post_data.study_time = study_time_data
+                post_data.title = form.cleaned_data['title']
+                post_data.textbook = form.cleaned_data['textbook']
+                if request.FILES:
+                    post_data.image = request.FILES.get('image') 
+                post_data.content = form.cleaned_data['content']
+                post_data.save(commit = False)
+                post_data.save_m2m()
+                # post_data = form.save(commit=False)
+                # post_data.author = request.user
+                # if request.FILES:
+                #     post_data.image = request.FILES.get('image') 
+                # post_data.save()
+                # form.save_m2m()
+                return redirect('study')
+
+            return render(request, 'app/post_form.html', {
+                'form': form,
+            })
+
+# class PostEditView(LoginRequiredMixin, View):
 #     def get(self, request, *args, **kwargs):
 #         post_data = Post.objects.get(id=self.kwargs['pk'])
 #         form = PostForm(
