@@ -132,7 +132,7 @@ class CreatePostView(LoginRequiredMixin, View):
 class PostEditView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         post_data = Post.objects.get(id=self.kwargs['pk'])  
-        form = PostForm(request.POST ,request.FILES or None, initial={
+        form = PostForm(request.POST or None, initial={
                 'title': post_data.title,
                 'study_time': post_data.study_time,
                 'level': post_data.level,
@@ -167,8 +167,11 @@ class PostEditView(LoginRequiredMixin, View):
                 if request.FILES:
                     post_data.image = request.FILES.get('image') 
                 post_data.content = form.cleaned_data['content']
-                post_data.save(commit = False)
+                post_data.save()
+                part = form.cleaned_data['part']
+                post_data.part = part
                 post_data.save_m2m()
+                return redirect('post_detail', self.kwargs['pk'])
                 # post_data = form.save(commit=False)
                 # post_data.author = request.user
                 # if request.FILES:
