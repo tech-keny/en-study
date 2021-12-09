@@ -1,5 +1,7 @@
+from django.http import request
 from django.urls import path
 from app import views
+from app.models import Post
 from .views import CommentDeleteView, CommentReplyView, like
 
 urlpatterns = [

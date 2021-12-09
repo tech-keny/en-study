@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>This is the edit page</h1>
+<form action="" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{{ form.as_p }}
+
+<input type="submit" value="編集OK(検索画面へ)">
+</form>
+  
+<form>
+    <a href="{% url 'study' %}">検索画面</a>
+</form>
+
+  {% endblock %}  

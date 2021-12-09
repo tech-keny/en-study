@@ -6,15 +6,45 @@
 <div class="my-4">
     <h2>投稿</h2>
 </div>
-
-<form action="" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-
-  {{ form.as_p }}
-
-  <input class="" type="submit" value="送信">
-</form>
-
+<div class="my-5 mx-auto">
+    <div class="">
+        <h5 class="text-center">投稿</h5>
+        <form action="" method="POST" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <div class="form-label-group">
+            {% render_field form.level class="form-control" placeholder="プロフィール画像" %}
+            </div>
+            <div class="form-label-group">
+            {{ form.part.0}}
+            {{ form.part.1}}
+            {{ form.part.2}}
+            {{ form.part.3}}
+            {{ form.part.4}}
+            {{ form.part.5}}
+            {{ form.part.6}}
+            </div>
+            <div class="form-label-group">
+            {% render_field form.study_time class="form-control" placeholder="平均勉強時間/日" %}
+            </div>
+            <div class="form-label-group">
+            {% render_field form.group class="form-control" placeholder="分類" %}
+            </div>
+            <div class="form-label-group">
+            {% render_field form.title class="form-control" placeholder="タイトル" %}
+            </div>
+            <div class="form-label-group">
+            {% render_field form.textbook class="form-control" placeholder="参考書" %}
+            </div>
+            <div class="form-label-group">
+            {{ form.image }}
+            </div>
+            <div class="form-label-group">
+            {% render_field form.content class="form-control" placeholder="勉強法" %}
+            </div>
+          <input class="" type="submit" value="送信">
+        </form>
+</div>
+</div>
 
 
 

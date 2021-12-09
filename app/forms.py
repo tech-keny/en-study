@@ -6,6 +6,8 @@ from django.forms.models import ModelForm
 from django.forms.widgets import CheckboxSelectMultiple
 
 
+
+
 class PostForm(forms.ModelForm):
 
     part = forms.ModelMultipleChoiceField(queryset=Part.objects,widget=forms.CheckboxSelectMultiple)
@@ -13,6 +15,7 @@ class PostForm(forms.ModelForm):
         model = Post 
         
         fields = ["level","part","study_time","group","title","textbook","image","content"]
+
 
 
 # class PostForm(forms.Form):

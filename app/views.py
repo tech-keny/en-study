@@ -4,6 +4,7 @@ from django.views.generic import View, FormView
 from django import forms
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
+from django.views.generic import edit
 from django.views.generic.edit import UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Comment, Level, Post, Question,Like,Group,Part,StudyTime
@@ -129,6 +130,13 @@ class CreatePostView(LoginRequiredMixin, View):
 #         })
 
 
+
+
+
+
+
+# ↓途中のeditView
+
 class PostEditView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         post_data = Post.objects.get(id=self.kwargs['pk'])  
@@ -148,30 +156,12 @@ class PostEditView(LoginRequiredMixin, View):
         })
     
     def post(self, request, *args, **kwargs): 
+        post_data = Post.objects.get(id=self.kwargs['pk'])
         if request.method == 'POST':
-            form = PostForm(request.POST, request.FILES)
+
+            form = PostForm(request.POST, request.FILES, instance=post_data)
             if form.is_valid():
-                post_data = Post.objects.get(id=self.kwargs['pk'])
-                post_data.title = form.cleaned_data['title']
-                group = form.cleaned_data['group']
-                group_data = Group.objects.get(name=group)
-                post_data.group = group_data
-                level = form.cleaned_data['level']
-                level_data = Level.objects.get(name=level)
-                post_data.level = level_data
-                study_time = form.cleaned_data['study_time']
-                study_time_data = StudyTime.objects.get(name=study_time)
-                post_data.study_time = study_time_data
-                post_data.title = form.cleaned_data['title']
-                post_data.textbook = form.cleaned_data['textbook']
-                if request.FILES:
-                    post_data.image = request.FILES.get('image') 
-                post_data.content = form.cleaned_data['content']
-                post_data.save()
-                part = form.cleaned_data['part']
-                post_data.part = part
-                post_data.save_m2m()
-                return redirect('post_detail', self.kwargs['pk'])
+                form.save()
                 # post_data = form.save(commit=False)
                 # post_data.author = request.user
                 # if request.FILES:
@@ -183,6 +173,8 @@ class PostEditView(LoginRequiredMixin, View):
             return render(request, 'app/post_form.html', {
                 'form': form,
             })
+
+# ↑途中のEditView 
 
 # class PostEditView(LoginRequiredMixin, View):
 #     def get(self, request, *args, **kwargs):
