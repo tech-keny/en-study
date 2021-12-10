@@ -88,13 +88,16 @@ main {
 }
 
 .form-control:focus {
+  border-color: #EE6C4D;
 	box-shadow: none;
 }
 .form-image {
 	height: 50px;
 	padding-top: 6px;
 }
-
+.card {
+  border: none;
+}
 
 .card-auth {
 	width: 400px;
@@ -547,4 +550,8 @@ hr {
 
 .custom-checkbox-label:hover {
   opacity: 0.5;
+}
+
+.contact {
+  max-width: 500px;
 }

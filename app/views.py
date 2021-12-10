@@ -2,17 +2,22 @@ from django.forms.models import ModelForm
 from django.urls.conf import path
 from django.views.generic import View, FormView
 from django import forms
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic import edit
-from django.views.generic.edit import UpdateView, DeleteView
+from django.views.generic.edit import  DeleteView
 from django.urls import reverse_lazy
 from .models import Comment, Level, Post, Question,Like,Group,Part,StudyTime
-from .forms import PostForm, CommentForm #PartForm
+from .forms import PostForm, CommentForm, QuestionForm, ContactForm
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponseRedirect, HttpResponse, request
+from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.core.mail import BadHeaderError, EmailMessage
+from django.http import HttpResponse
+import textwrap
+
 
 class IndexView(View):
     def get(self, request, *args, **kwargs):
@@ -277,17 +282,63 @@ class CommentReplyView(LoginRequiredMixin, View):
             'form':form,
             'comments': comments,
         })
-        
+
+
 
 class QuestionView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         question_data = Question.objects.all()
+        form = QuestionForm(request.POST or None)
         return render(request, 'app/question.html', {
-            'question_data': question_data
+            'question_data': question_data,
+            'form': form
         })
 
     def post(self, request, *args, **kwargs):
-        pass
+        if request.method == 'POST':
+            form = QuestionForm(request.POST or None)
+
+            if form.is_valid():
+                question = Question()
+                question.user = request.user
+                question.content = form.cleaned_data['content']
+                question.save()
+            
+            question_data = Question.objects.all()
+
+            return render(request, 'app/question.html', {
+                'form':form,
+                'question_data': question_data
+            })
+
+class QuestionReplyView(LoginRequiredMixin, View):
+    def post(self, request, pk, *args, **kwargs):
+        parent_question = Question.objects.get(pk=pk)
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            question = form.save(commit=False)
+            question.user = request.user
+            question.parent = parent_question
+            question.save()
+        
+            
+        question_data = Question.objects.all()
+        
+        return render(request, 'app/question.html', {
+            'form':form,
+            'question_data': question_data
+        })
+
+class QuestionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Question
+    template_name = 'app/question_delete.html'
+    def get_success_url(self):
+        return reverse_lazy('question')
+    def test_func(self):
+        question = self.get_object()
+        return self.request.user == question.user
+
+
 
 class LevelView(View):
     def get(self, request, *args, **kwargs):
@@ -363,4 +414,65 @@ def study_like(request, *args, **kwargs):
     like.save()
     messages.success(request, 'いいね！しました')
     return HttpResponseRedirect(reverse_lazy('study'))
+
+class ContactView(View):
+    def get(self, request, *args, **kwargs):
+        form = ContactForm(request.POST or None)
+
+        return render(request, 'app/contact.html', {
+            'form': form
+        })
+    
+    def post(self, request, *args, **kwargs):
+        form = form = ContactForm(request.POST or None)
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            subject = 'お問い合わせありがとうございます。'
+            content = textwrap.dedent('''
+                ※このメールはシステムからの自動返信です。
+                
+                {name} 様
+                
+                お問い合わせありがとうございました。
+                以下の内容でお問い合わせを受け付けいたしました。
+                内容を確認させていただき、ご返信させて頂きますので、少々お待ちください。
+                
+                --------------------
+                ■お名前
+                {name}
+                
+                ■メールアドレス
+                {email}
+                
+                ■メッセージ
+                {message}
+                --------------------
+                ''').format(
+                    name=name,
+                    email=email,
+                    message=message
+                )
+
+            to_list = [email]
+            bcc_list = [settings.EMAIL_HOST_USER]
+
+            try:
+                message = EmailMessage(subject=subject, body=content, to=to_list, bcc=bcc_list)
+                message.send()
+            except BadHeaderError:
+                return HttpResponse("無効なヘッダが検出されました。")
+
+            return redirect('thanks') 
+
+        return render(request, 'app/contact.html', {
+            'form': form
+        })
+
+
+class ThanksView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'app/thanks.html')
 

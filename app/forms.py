@@ -1,9 +1,9 @@
 from django import forms
-from django.db.models import fields, query
 from django.forms import widgets
-from .models import Level,Group,Part, StudyTime,Comment, Post
+from .models import Part, Question,Comment, Post
 from django.forms.models import ModelForm
 from django.forms.widgets import CheckboxSelectMultiple
+
 
 
 
@@ -57,3 +57,21 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ['content']
 
+class QuestionForm(forms.ModelForm):
+    content = forms.CharField(
+        label='',
+        widget=forms.Textarea(
+            attrs={'rows': '3',
+                  'placeholder': 'Ask Something...'}
+        ))
+    class Meta:
+        model = Question
+        fields = ['content']
+
+
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=30, label='名前')
+    email = forms.EmailField(max_length=30, label='メールアドレス')
+    message = forms.CharField(label='メッセージ', widget=forms.Textarea())

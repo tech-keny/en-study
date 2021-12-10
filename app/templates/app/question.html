@@ -1,9 +1,56 @@
-{% extends "app/base.html" %} {% block content %}
+{% extends "app/base.html" %} 
+{% load widget_tweaks %}
+{% block content %}
+
+<h1>みんなの相談</h1>
 {% for question in question_data %}
-    
-      <div class="">{{ question.user }}</div>
-      <div class="">{{ question.content}}</div>
-      <div class="">{{ question.created}}</div>
-      
+
+{{ question.user }} <br>
+{{ question.content }}
+{% if question.is_parent %}
+            <div>
+                <button class="remove-default-btn"><i class="far fa-comment-dots" onclick="questionReplyToggle('{{ question.pk }}')">Reply</i></button>
+            </div>
+            <div class="row justify-content-center mt-3 mb-5 d-none" id="{{ question.pk }}">
+                <div class="col">
+                  <form method="POST" action="{% url 'question_reply' question.pk %}">
+                      {% csrf_token %}
+                      <div class="formpost">
+                        {% render_field form.content class="form-control" placeholder="ここに入力" %}
+                      </div>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success mt-3">Submit!</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% for child_question in question.children %}
+            <div class="row justify-content-center mt-3 mb-5 child-question">
+                <div class="col-md-5 col-sm-12 border-bottom">
+                    <div>
+                        <p class="post-text">
+                        {{ child_question.user }}{{ child_question.created }}
+                        </p>
+                        <p>{{ child_question.content }}</p>
+                        <div class="mb-3">
+                            {% if request.user == child_question.user %}
+                                <a href="{% url 'question_delete'  child_question.pk %}" class="edit-color">削除する</i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+<hr> 
+
 {% endfor %}
+<h1>相談内容を入力</h1>
+<form method="POST">
+    {% csrf_token %}
+    <div class="formpost">
+    {% render_field form.content class="form-control" placeholder="ここに入力" %}
+    </div>
+    <button class="btn btn-success mt-3">Submit!</button>
+</form>
 {% endblock %}

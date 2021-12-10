@@ -16,10 +16,14 @@ urlpatterns = [
     path('post/<int:post_pk>/comment/<int:pk>/', CommentDeleteView.as_view(), name='comment_delete'),
     path('post/<int:post_pk>/comment/reply/<int:pk>', CommentReplyView.as_view(), name='comment_reply'),
     path('question/', views.QuestionView.as_view(), name='question'),
+    path('question/<int:pk>/reply', views.QuestionReplyView.as_view(), name='question_reply'),
+    path('question/<int:pk>/delete', views.QuestionDeleteView.as_view(), name='question_delete'),
     path('level/<str:level>/', views.LevelView.as_view(), name='level'), 
     path('group/<str:group>/', views.GroupView.as_view(), name='group'), 
     path('part/<str:part>/', views.PartView.as_view(), name='part'), 
     path('study_time/<str:study_time>/', views.StudyTimeView.as_view(), name='study_time'), 
     path('post/<int:pk>/like/',views.like,name='like'), # 追記
     path('study/<int:pk>/like/',views.study_like,name='study_like'), # 追記
+    path('contact/', views.ContactView.as_view(), name='contact'),
+    path('thanks/', views.ThanksView.as_view(), name='thanks'),
 ]

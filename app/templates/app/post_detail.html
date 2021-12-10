@@ -1,6 +1,5 @@
 {% extends "app/base.html" %}
 {% load widget_tweaks %}
-{% load crispy_forms_tags %}
 {% load static %}
 
 {% block content %}
@@ -130,16 +129,15 @@
     {% endif %}
     {% endfor %}
 
+{% if request.user != post_data.author %}
 <div class="row justify-content-center mt-3">
     <div class="col-md-5 col-sm-12">
-        <h5>Add a Comment!</h5>
+        <h5>コメントを追加する。</h5>
     </div>
 </div>
 <div class="row justify-content-center mt-3 mb-5">
     <div class="col-md-5 col-sm-12">
         <form method="POST">
-            {% csrf_token %}
-            <form method="post" enctype="multipart/form-data">
               {% csrf_token %}
               <div class="formpost">
                   {% render_field form.content class="form-control" placeholder="ここに入力" %}
@@ -150,7 +148,7 @@
         </form>
     </div>
 </div>
-
+{% endif %}
   
     
 

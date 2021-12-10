@@ -53,11 +53,23 @@ class Question(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField("質問内容")
-    updated = models.DateTimeField("更新日", auto_now=True)
     created = models.DateTimeField("作成日", auto_now_add=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='+')
 
+    @property
+    def children(self):
+        return Question.objects.filter(parent=self).order_by('-created').all()
+        
+    @property
+    def is_parent(self):
+        if self.parent is None:
+            return True
+        return False
+    class Meta:
+        # sort comments in chronological order by default
+        ordering= ('created',)
     def __str__(self):
-        return self.content
+        return 'Question by {}'.format(self.content)
 
 
 class Comment(models.Model):
