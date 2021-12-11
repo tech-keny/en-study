@@ -6,6 +6,8 @@ from .views import CommentDeleteView, CommentReplyView, like
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
+    path('terms', views.TermsView.as_view(), name='terms'),
+    path('privacy', views.PrivacyView.as_view(), name='privacy'),
     path('study', views.StudyView.as_view(), name='study'),
     # path('study/level/<str:study_level>/', views.StudyView.as_view(), name='study_level'),
     # path('study/group/<str:study_group>/', views.StudyView.as_view(), name='study_group'),

@@ -21,9 +21,15 @@ import textwrap
 
 class IndexView(View):
     def get(self, request, *args, **kwargs):
-        # post_data = Post.objects.order_by("-id")
         return render(request, 'app/index.html', {
-            # 'post_data': post_data,
+        })
+class TermsView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'app/terms.html', {
+        })
+class PrivacyView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'app/privacy.html', {
         })
 
 CommentForm = forms.modelform_factory(Comment, fields=('content', 'user' ,))
