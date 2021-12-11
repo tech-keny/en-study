@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import UserManager, PermissionsMixin
 from django.utils import timezone
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class UserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -28,13 +28,21 @@ class UserManager(UserManager):
 
         return self._create_user(email, password, **extra_fields)
 
-
+class Ocupation(models.Model):
+    name = models.CharField("職業",max_length=30)
+    def __str__(self):
+        return self.name
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField('メールアドレス', unique=True)
+    email = models.EmailField('メールアドレス', unique=True, )
     name = models.CharField(('ニックネーム'), max_length=30)
-    department = models.CharField(('所属'), max_length=30, blank=True)
+    max_listning= models.IntegerField(('ベストリスニングスコア'),  blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
+    max_Reading= models.IntegerField(('ベストリーディングスコア'),  blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
+    first_listnig =models.IntegerField(('初めてのリスニングスコア'),blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
+    first_reading =models.IntegerField(('初めてのリーディングスコア'),blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
+    ocupation = models.ForeignKey(Ocupation,blank=True, null=True, on_delete=models.CASCADE,)
     created = models.DateTimeField(('入会日'), default=timezone.now)
     icon = models.ImageField(upload_to='images', verbose_name='プロフィール画像', default="img/user.png", null=True, blank=True) # 追加
+    content = models.CharField('自己紹介',blank=True, max_length=100)
 
     is_staff = models.BooleanField(
         ('staff status'),
@@ -66,3 +74,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return self.name
+

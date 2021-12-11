@@ -26,7 +26,6 @@ class ProfileEditView(LoginRequiredMixin, View):
             request.POST or None,
             initial={
                 'name': user_data.name,
-                'department': user_data.department,
                 'image': user_data.icon
             }
         )
