@@ -35,9 +35,9 @@ class Ocupation(models.Model):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('メールアドレス', unique=True, )
     name = models.CharField(('ニックネーム'), max_length=30)
-    max_listning= models.IntegerField(('ベストリスニングスコア'),  blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
-    max_Reading= models.IntegerField(('ベストリーディングスコア'),  blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
-    first_listnig =models.IntegerField(('初めてのリスニングスコア'),blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
+    max_listening= models.IntegerField(('ベストリスニングスコア'),  blank=True,null=True, )
+    max_reading= models.IntegerField(('ベストリーディングスコア'),  blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
+    first_listening =models.IntegerField(('初めてのリスニングスコア'),blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
     first_reading =models.IntegerField(('初めてのリーディングスコア'),blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
     ocupation = models.ForeignKey(Ocupation,blank=True, null=True, on_delete=models.CASCADE,)
     created = models.DateTimeField(('入会日'), default=timezone.now)

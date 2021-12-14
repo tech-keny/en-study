@@ -5,6 +5,7 @@ from accounts.forms import ProfileForm, SignupUserForm
 from django.shortcuts import render, redirect
 from allauth.account import views
 from app.models import Post
+from accounts.models import Ocupation
 
 
 
@@ -14,9 +15,13 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         user_data = CustomUser.objects.get(id=request.user.id)
         post_data = Post.objects.filter(author=request.user)
+        max_total = user_data.max_listening + user_data.max_reading
+        first_total = user_data.first_listening + user_data.first_reading
         return render(request, 'accounts/profile.html', {
             'user_data': user_data,
-            'post_data': post_data
+            'post_data': post_data,
+            'max_total':max_total,
+            'first_total':first_total
         })
 
 class ProfileEditView(LoginRequiredMixin, View):
@@ -26,6 +31,12 @@ class ProfileEditView(LoginRequiredMixin, View):
             request.POST or None,
             initial={
                 'name': user_data.name,
+                'max_listening': user_data.max_listening,
+                'max_reading': user_data.max_reading,
+                'first_listening': user_data.first_listening,
+                'first_reading': user_data.first_reading,
+                'ocupation': user_data.ocupation,
+                'content': user_data.content,
                 'image': user_data.icon
             }
         )
@@ -40,7 +51,14 @@ class ProfileEditView(LoginRequiredMixin, View):
         if form.is_valid():
             user_data = CustomUser.objects.get(id=request.user.id)
             user_data.name = form.cleaned_data['name']
-            user_data.department = form.cleaned_data['department']
+            user_data.max_listening = form.cleaned_data['max_listening']
+            user_data.max_reading = form.cleaned_data['max_reading']
+            user_data.first_listening = form.cleaned_data['first_listening']
+            user_data.first_reading = form.cleaned_data['first_reading']
+            ocupation = form.cleaned_data['ocupation']
+            ocupation_data = Ocupation.objects.get(name=ocupation)
+            user_data.ocupation = ocupation_data
+            user_data.content = form.cleaned_data['content']
             if request.FILES.get('icon'):
                 user_data.icon = request.FILES.get('icon') #追加
             user_data.save()

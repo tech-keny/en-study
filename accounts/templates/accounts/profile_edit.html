@@ -25,9 +25,29 @@
                         </td>
                     </tr>
                     <tr>
-                        <th class="header">所属</th>
+                        <th class="header">ベストリスニングスコア<br>ベストリーディングスコア</th>
+                        <td class="data d-flex">
+                            <p>{% render_field form.max_listening class="form-control" placeholder="ベストリスニングスコア" %}</p>
+                            <p>{% render_field form.max_reading class="form-control" placeholder="ベストリーディングスコア" %}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="header">最初のリスニングスコア<br>最初のリーディングスコア</th>
+                        <td class="data d-flex">
+                            <p>{% render_field form.first_listening class="form-control" placeholder="最初のリスニングスコア" %}</p>
+                            <p>{% render_field form.first_reading class="form-control" placeholder="最初のリーディングスコア" %}</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="header">職業</th>
                         <td class="data">
-                            {% render_field form.department class="form-control" placeholder="所属" %}
+                            {% render_field form.ocupation class="form-control" placeholder="職業" %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="header">自己紹介</th>
+                        <td class="data">
+                            {% render_field form.content class="form-control" placeholder="自己紹介" %}
                         </td>
                     </tr>
                 </tbody>
