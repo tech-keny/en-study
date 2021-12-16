@@ -54,9 +54,11 @@
                 </tr>
             </tbody>
         </table>
+        {% if request.user == user_data.name %}
         <div class="button mx-auto">
             <a class="btn btn-lg btn-warning btn-block" href="{% url 'profile_edit' %}">編集する</a>
         </div>
+        {% endif %}
     </div>
 </div>
 

@@ -23,7 +23,7 @@ class ProfileView(LoginRequiredMixin, View):
             'first_total':first_total
         })
 class PostProfileView(LoginRequiredMixin, View):
-    def get(self, request, pk, name, *args, **kwargs):
+    def get(self, request, pk, *args, **kwargs):
         user_data = CustomUser.objects.get(id=self.kwargs['pk'])
         post_data = Post.objects.filter(author=user_data).order_by('-created')
         max_total = user_data.max_listening + user_data.max_reading
