@@ -1,6 +1,6 @@
 from django.forms.models import ModelForm
 from django.urls.conf import path
-from django.views.generic import View, FormView
+from django.views.generic import View
 from django import forms
 from django.shortcuts import render, redirect
 from django.views import generic
@@ -17,6 +17,10 @@ from django.conf import settings
 from django.core.mail import BadHeaderError, EmailMessage
 from django.http import HttpResponse
 import textwrap
+from django.db.models import Q 
+from functools import reduce
+from operator import and_
+
 
 
 class IndexView(View):
@@ -482,3 +486,22 @@ class ThanksView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'app/thanks.html')
 
+class SearchView(View):
+    def get(self, request, *args, **kwargs):
+        post_data = Post.objects.order_by('-id')
+        search_post = request.GET.get('search')
+
+
+        if search_post:
+              exclusion_list = set([' ', '　'])
+              query_list = ''
+              for word in search_post:
+                  if not word in exclusion_list:
+                      query_list += word
+              query = reduce(and_, [Q(title__icontains=q) | Q(content__icontains=q) | Q(textbook__icontains=q) for q in query_list])
+              post_data = post_data.filter(query)
+        else:
+            # If not searched, return default posts
+            post_data = Post.objects.all().order_by("-created")
+
+        return render(request, 'app/study.html', {'post_data': post_data})

@@ -1,11 +1,10 @@
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from accounts.models import CustomUser
+from accounts.models import CustomUser, Ocupation
 from accounts.forms import ProfileForm, SignupUserForm
 from django.shortcuts import render, redirect
 from allauth.account import views
 from app.models import Post
-from accounts.models import Ocupation
 
 
 
@@ -13,8 +12,8 @@ from accounts.models import Ocupation
 
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        user_data = CustomUser.objects.get(id=request.user.id)
-        post_data = Post.objects.filter(author=request.user)
+        user_data = CustomUser.objects.get(id=request.user.id )
+        post_data = Post.objects.filter(author=request.user).order_by('-created')
         max_total = user_data.max_listening + user_data.max_reading
         first_total = user_data.first_listening + user_data.first_reading
         return render(request, 'accounts/profile.html', {
@@ -23,6 +22,20 @@ class ProfileView(LoginRequiredMixin, View):
             'max_total':max_total,
             'first_total':first_total
         })
+class PostProfileView(LoginRequiredMixin, View):
+    def get(self, request, pk, name, *args, **kwargs):
+        user_data = CustomUser.objects.get(id=self.kwargs['pk'])
+        post_data = Post.objects.filter(author=user_data).order_by('-created')
+        max_total = user_data.max_listening + user_data.max_reading
+        first_total = user_data.first_listening + user_data.first_reading
+        return render(request, 'accounts/profile.html', {
+            'user_data': user_data,
+            'post_data': post_data,
+            'max_total':max_total,
+            'first_total':first_total
+        })
+
+
 
 class ProfileEditView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):

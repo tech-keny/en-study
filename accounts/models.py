@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import UserManager, PermissionsMixin
+from django.db.models.fields import related
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -34,7 +35,7 @@ class Ocupation(models.Model):
         return self.name
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('メールアドレス', unique=True, )
-    name = models.CharField(('ニックネーム'), max_length=30)
+    name = models.CharField(('ニックネーム'), max_length=30,)
     max_listening= models.IntegerField(('ベストリスニングスコア'),  blank=True,null=True, )
     max_reading= models.IntegerField(('ベストリーディングスコア'),  blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])
     first_listening =models.IntegerField(('初めてのリスニングスコア'),blank=True,null=True,validators=[MinValueValidator(0), MaxValueValidator(495)])

@@ -2,10 +2,12 @@ from django.http import request
 from django.urls import path
 from app import views
 from app.models import Post
-from .views import CommentDeleteView, CommentReplyView, like
+from .views import CommentDeleteView, CommentReplyView
+
 
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
+    path('search', views.SearchView.as_view(), name='search'),
     path('terms', views.TermsView.as_view(), name='terms'),
     path('privacy', views.PrivacyView.as_view(), name='privacy'),
     path('study', views.StudyView.as_view(), name='study'),
@@ -28,4 +30,6 @@ urlpatterns = [
     path('study/<int:pk>/like/',views.study_like,name='study_like'), # 追記
     path('contact/', views.ContactView.as_view(), name='contact'),
     path('thanks/', views.ThanksView.as_view(), name='thanks'),
+    
 ]
+
