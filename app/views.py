@@ -42,10 +42,14 @@ class StudyView(generic.ListView):
     model = Post
     def get(self, request, *args, **kwargs):
         post_data = Post.objects.order_by("-id")
+        rank_data = Post.objects.order_by("-like_num")
+        ranking= rank_data[0:3]
 
         return render(request, 'app/study.html', {
             'post_data': post_data,
-        })
+            'rank_data': rank_data,
+            'ranking':ranking
+        }) 
 
 class PostDetailView(View):
         

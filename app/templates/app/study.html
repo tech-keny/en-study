@@ -81,10 +81,61 @@
     <hr>
 </div>
 
+{% for rank in ranking %}
 
+<div class="study-container mx-auto mt-2 w-100">
+    
+  <div class="study-frame mx-auto col-sm-12 col-md- col-lg-8 p-0">
+      <div class="frame-top mb-1"></div>
+      <div class="study-author d-flex w-100 pl-5">
+          <div class="icon-frame mt-2 mr-4 mt-3 text-center">
+              <img src="{{ rank.author.icon.url }}" alt="" class="icon my-2 study-icon" style="height: 40px; width: 40px;">
+          </div>
+          <div class="author-name h2 mt-3">
+              <p class="author"><a href="{% url 'post_profile' rank.author.id %}">{{post.author.name}}さん</p></a>
+          </div>
+      </div>
+      <hr class="study-author-line study-line w-100 mt-0">
+      <a href="{% url 'post_detail' rank.id %}" class="study-anchor">
+          <div class="d-flex study-content w-100 pb-4">
+              <div class="study-list mt-5 ml-3" >
+                  <img src="{{ rank.image.url }}" alt="" class="icon study-icon" style="height: 200px; width: auto; object-fit: contain;">
+              </div>
+              <div class="study-list w-100 ml-4">
+                  <div class="d-flex">
+                      <p class="study-item h3">{{ rank.title }}</p>
+                      <div class="level_time mr-5">
+                          <p class="study-item">レベル：{{ rank.level }}</p>
+                          <p class="study-item">平均勉強時間/日：{{ rank.study_time }}</p>
+                          <p class="study-item">分類：{{ rank.group }}</p>
+                          <p class="study-item">Part:
+                            {% for part in rank.part.all %} 
+                            {{ part }}
+                            {% endfor %}
+                          </p>
+                      </div>
+                  </div>  
+                  <p class="study-book ">参考書名:{{ rank.textbook }}</p>
+                  <hr class="text-bool-line study-line" style="width: 200px;">
+                  <p class="study-content"><span class="how-to-study">勉強法:</span><div class="">{{ rank.content }}</p>
+                  <div class="d-flex good-frame mr-2 w-50 ml-auto">
+                      <div class="d-flex justify-content-center align-items-center">
+                      <div class="btn good-button ml-5 mr-5">
+                          <a href="{% url 'study_like' rank.id %}">参考になった！</a>
+                      </div>
+                      <div>
+                      {{rank.like_num}}件
+                      </div>
+                  </div>
+                  </div>
+              </div>
+          </div>
+      </a>
+  </div>
+</div>
+{% endfor %}
 
-
-
+<h2 class="ml-2">-----------------------------------------------------境界線-----------------------------------------------------</h2>
 
 {% for post in post_data %}
 <div class="study-container mx-auto mt-2 w-100">

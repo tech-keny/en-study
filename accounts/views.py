@@ -14,26 +14,41 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         user_data = CustomUser.objects.get(id=request.user.id )
         post_data = Post.objects.filter(author=request.user).order_by('-created')
-        max_total = user_data.max_listening + user_data.max_reading
-        first_total = user_data.first_listening + user_data.first_reading
-        return render(request, 'accounts/profile.html', {
-            'user_data': user_data,
-            'post_data': post_data,
-            'max_total':max_total,
-            'first_total':first_total
-        })
+        if user_data.max_listening and user_data.max_reading and user_data.first_listening and user_data.first_reading:
+            max_total = user_data.max_listening + user_data.max_reading
+            first_total = user_data.first_listening + user_data.first_reading
+            return render(request, 'accounts/profile.html', {
+                'user_data': user_data,
+                'post_data': post_data,
+                'max_total':max_total,
+                'first_total':first_total
+            })
+        
+        else:
+            return render(request, 'accounts/profile.html', {
+                'user_data': user_data,
+                'post_data': post_data,
+            })
+
 class PostProfileView(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
         user_data = CustomUser.objects.get(id=self.kwargs['pk'])
         post_data = Post.objects.filter(author=user_data).order_by('-created')
-        max_total = user_data.max_listening + user_data.max_reading
-        first_total = user_data.first_listening + user_data.first_reading
-        return render(request, 'accounts/profile.html', {
-            'user_data': user_data,
-            'post_data': post_data,
-            'max_total':max_total,
-            'first_total':first_total
-        })
+        if user_data.max_listening and user_data.max_reading and user_data.first_listening and user_data.first_reading:
+            max_total = user_data.max_listening + user_data.max_reading
+            first_total = user_data.first_listening + user_data.first_reading
+            return render(request, 'accounts/profile.html', {
+                'user_data': user_data,
+                'post_data': post_data,
+                'max_total':max_total,
+                'first_total':first_total
+            })
+        
+        else:
+            return render(request, 'accounts/profile.html', {
+                'user_data': user_data,
+                'post_data': post_data,
+            })
 
 
 
@@ -97,5 +112,8 @@ class LogoutView(views.LogoutView):
 class SignupView(views.SignupView):
     template_name = 'accounts/signup.html'
     form_class = SignupUserForm
+
+    def post(self, *args, **kwargs):
+        return redirect('profile_edit.html')
 
 
