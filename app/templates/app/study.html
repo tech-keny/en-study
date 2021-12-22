@@ -81,6 +81,9 @@
     <hr>
 </div>
 
+
+
+
 {% for rank in ranking %}
 
 <div class="study-container mx-auto mt-2 w-100">
@@ -92,7 +95,7 @@
               <img src="{{ rank.author.icon.url }}" alt="" class="icon my-2 study-icon" style="height: 40px; width: 40px;">
           </div>
           <div class="author-name h2 mt-3">
-              <p class="author"><a href="{% url 'post_profile' rank.author.id %}">{{post.author.name}}さん</p></a>
+              <p class="author"><a href="{% url 'post_profile' rank.author.id %}">{{rank.author.name}}さん</p></a>
           </div>
       </div>
       <hr class="study-author-line study-line w-100 mt-0">

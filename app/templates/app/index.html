@@ -44,6 +44,7 @@
             <img src="{% static 'img/board.png' %}" alt="掲示板を見てる人" style="width: auto ; height: 200px ;">
         </div>
     </div>
+
     <div class="header-ex d-flex w-100 justify-content-center mt-1">
         <div class="ex-text mt-2 mr-5 font-weight-bold">
             <ul class="ex-list pl-4 pt-2">
@@ -99,7 +100,28 @@
 
 <div class="bottom-set w-75 mx-auto">
     <p class="bottom-text text-center"><span class ="h4" style="color: #FFA500;">En-study</span>はTOEIC学習者がスコアアップを達成した勉強法・参考書などを共有し、TOEIC初学者・中級者がさらなるスコアアップを目指せるサービスです。</p>
+    
 </div>
+<div id="vue_example"></div>
+
+<div id="hello"></div>
+
+<div id="sample">
+  <p>{{ text  }}</p>
+</div>
+<script>
+  new Vue({
+    el: '#sample',
+    data: {
+      text: 'サンプル1'
+    }
+  })
+</script>
+<script type="text/javascript" src="{% static 'js/app.js' %}"></script>
+
+
+
+
 
 
 {% endblock %}
