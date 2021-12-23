@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount', # 追加
     'crispy_forms',
     'multiselectfield',
-    # 'django_cleanup.apps.CleanupConfig',#追加
+    'webpack_loader'
 ]
 
 MIDDLEWARE = [
@@ -164,3 +164,10 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_USER = 'test@gmail.com'
 # EMAIL_HOST_PASSWORD = 'test'
 # EMAIL_USE_TLS = True
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'dist/',
+        'STATS_FILE': BASE_DIR / 'frontend' / 'webpack-stats.json'
+    }
+}

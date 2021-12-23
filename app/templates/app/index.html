@@ -1,5 +1,6 @@
 {% extends "app/base.html" %}
 {% load static %}
+{% load render_bundle from webpack_loader %}
 
 
 {% block content %}
@@ -102,23 +103,12 @@
     <p class="bottom-text text-center"><span class ="h4" style="color: #FFA500;">En-study</span>はTOEIC学習者がスコアアップを達成した勉強法・参考書などを共有し、TOEIC初学者・中級者がさらなるスコアアップを目指せるサービスです。</p>
     
 </div>
-<div id="vue_example"></div>
 
-<div id="hello"></div>
-
-<div id="sample">
-  <p>{{ text  }}</p>
+<div id="app">
+{{ text }}
 </div>
-<script>
-  new Vue({
-    el: '#sample',
-    data: {
-      text: 'サンプル1'
-    }
-  })
-</script>
-<script type="text/javascript" src="{% static 'js/app.js' %}"></script>
 
+{% render_bundle 'app' %}
 
 
 

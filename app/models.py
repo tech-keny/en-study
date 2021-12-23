@@ -4,11 +4,15 @@ from django.db.models.deletion import CASCADE
 from accounts.models import CustomUser
 from django.utils import timezone
 
+
+
+
 class Part(models.Model):
     name = models.CharField("Part", max_length=50)
 
     def __str__(self):
         return self.name
+
 class StudyTime(models.Model):
     name = models.CharField("平均勉強時間/日", max_length=50)
 
@@ -95,7 +99,7 @@ class Comment(models.Model):
         ordering= ('created',)
     def __str__(self):
         return 'Comment by {}'.format(self.content)
-    
+
 
 class Like(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='like_user')

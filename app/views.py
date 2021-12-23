@@ -4,7 +4,7 @@ from django.views.generic import View
 from django import forms
 from django.shortcuts import render, redirect
 from django.views import generic
-from django.views.generic import edit
+from django.views.generic import edit, ListView
 from django.views.generic.edit import  DeleteView
 from django.urls import reverse_lazy
 from .models import Comment, Level, Post, Question,Like,Group,Part,StudyTime
@@ -20,6 +20,7 @@ import textwrap
 from django.db.models import Q 
 from functools import reduce
 from operator import and_
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 
@@ -44,12 +45,28 @@ class StudyView(generic.ListView):
         post_data = Post.objects.order_by("-id")
         rank_data = Post.objects.order_by("-like_num")
         ranking= rank_data[0:3]
+        paginator = Paginator(post_data, 5)
+        page = request.GET.get('page', 1)
+        try:
+            pages = paginator.page(page)
+        except PageNotAnInteger:
+            pages = paginator.page(1)
+        except EmptyPage:
+            pages = paginator.page(1)
+      
 
         return render(request, 'app/study.html', {
             'post_data': post_data,
             'rank_data': rank_data,
-            'ranking':ranking
+            'ranking':ranking,
+            'pages': pages
         }) 
+
+
+
+
+
+
 
 class PostDetailView(View):
         

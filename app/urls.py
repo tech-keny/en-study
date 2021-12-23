@@ -3,6 +3,8 @@ from django.urls import path
 from app import views
 from app.models import Post
 from .views import CommentDeleteView, CommentReplyView
+from django.urls import re_path
+
 
 
 urlpatterns = [

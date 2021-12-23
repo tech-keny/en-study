@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load render_bundle from webpack_loader %}
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
     <script src="https://unpkg.com/vue@2.5.17"></script>
 
     

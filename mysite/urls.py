@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('app.urls')),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('allauth.urls')), # 追加
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # 追加
