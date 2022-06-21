@@ -15,8 +15,6 @@ body {
 	width: 100%;
 }
 
-
-
 main {
 	flex: 1;
 }
@@ -182,7 +180,7 @@ main {
 
 
 .footer {
-	background-color: #FFA500;
+	background-color: #4DD0E1;
 	margin-top:150px;
 }
 
@@ -554,5 +552,10 @@ hr {
 
 .contact {
   max-width: 500px;
+}
+
+
+.v-application--wrap {
+  min-height: unset;
 }
 

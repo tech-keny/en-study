@@ -45,6 +45,15 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     icon = models.ImageField(upload_to='images', verbose_name='プロフィール画像', default="img/user.png", null=True, blank=True) # 追加
     content = models.CharField('自己紹介',blank=True, max_length=100)
 
+    max_total = models.IntegerField(('最高スコア'), default=0)
+    first_total = models.IntegerField('最初のスコア', default=0)
+    def save(self, *args, **kwargs):
+        self.max_total= self.max_listening + self.max_reading
+        self.first_total= self.first_listening + self.first_reading
+        super(CustomUser, self).save(*args, **kwargs)
+
+
+
     is_staff = models.BooleanField(
         ('staff status'),
         default=False,

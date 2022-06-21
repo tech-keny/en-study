@@ -68,7 +68,9 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            str(BASE_DIR.joinpath('templates'))
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -168,6 +170,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'dist/',
-        'STATS_FILE': BASE_DIR / 'frontend' / 'webpack-stats.json'
+        'STATS_FILE': str(BASE_DIR.joinpath('frontend', 'webpack-stats.json'))
     }
 }

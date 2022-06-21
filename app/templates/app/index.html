@@ -1,117 +1,143 @@
 {% extends "app/base.html" %}
 {% load static %}
-{% load render_bundle from webpack_loader %}
 
 
 {% block content %}
 
-<div class="btnvar">
-    <ul class="btn-list d-flex ml-auto">
-    {% if user.is_authenticated %}
-        <li class="btn-item">
-            <a href="{% url 'account_logout' %}">
-                <button class="btn mr-1">ログアウトする</button>
-            </a>
-        </li>
-        <li class="btn-item">
-            <a href="{% url 'profile' %}">
-                <button class="btn mr-4">プロフィール</button>
-            </a>
-        </li>
-    </ul>
-    {% else %}
-        <li class="btn-item">
-            <a href="{% url 'account_signup' %}">
-                <button class="btn mr-1">新規登録する</button>
-            </a>
-        </li>
-        <li class="btn-item">
-            <a href="{% url 'account_login' %}">
-                <button class="btn mr-4">ログインする</button>
-            </a>
-        </li>
-    </ul>
-    {% endif %}
+<div class="btnvar mt-0">
+  <ul class="btn-list d-flex ml-auto">
+  {% if user.is_authenticated %}
+      <li class="btn-item">
+          <a href="{% url 'account_logout' %}">
+              <button class="btn mr-1">ログアウトする</button>
+          </a>
+      </li>
+      <li class="btn-item">
+          <a href="{% url 'profile' %}">
+              <button class="btn mr-4">プロフィール</button>
+          </a>
+      </li>
+  </ul>
+  {% else %}
+      <li class="btn-item">
+          <a href="{% url 'account_signup' %}">
+              <button class="btn mr-1">新規登録する</button>
+          </a>
+      </li>
+      <li class="btn-item">
+          <a href="{% url 'account_login' %}">
+              <button class="btn mr-4">ログインする</button>
+          </a>
+      </li>
+  </ul>
+  {% endif %}
 </div>
 
 <div class="header w-75 mx-auto">
-    <div class="header-title d-flex w-100 justify-content-center">
-        <div class="title-text text-center mt-2 mr-1">
-            <p class="main-title h3 font-weight-bold"><nobr>TOEIC学習を挫折しないために</nobr></p>
-            <p class="sub-title mb-1 h4 font-weight-bold"><nobr>～最適な勉強法と参考書を～</nobr></p>
-            <p class="small-title h4"><nobr><u>こんな経験ありませんか？</u></nobr></p>
-        </div>
-        <div class="image-area ml-5">
-            <img src="{% static 'img/board.png' %}" alt="掲示板を見てる人" style="width: auto ; height: 200px ;">
-        </div>
-    </div>
+  <div class="header-title d-flex w-100 justify-content-center">
+      <div class="title-text text-center mt-2 mr-1">
+          <p class="main-title h3 font-weight-bold"><nobr>TOEIC学習を挫折しないために</nobr></p>
+          <p class="sub-title mb-1 h4 font-weight-bold"><nobr>～最適な勉強法と参考書を～</nobr></p>
+          <p class="small-title h4"><nobr><u>こんな経験ありませんか？</u></nobr></p>
+      </div>
+      <div class="image-area ml-5">
+          <img src="{% static 'img/board.png' %}" alt="掲示板を見てる人" style="width: auto ; height: 200px ;">
+      </div>
+  </div>
 
-    <div class="header-ex d-flex w-100 justify-content-center mt-1">
-        <div class="ex-text mt-2 mr-5 font-weight-bold">
-            <ul class="ex-list pl-4 pt-2">
-                <li class="ex-item"><nobr>勉強を始めたはいいけど、何から進めていいか分からない。</nobr></li>
-                <li class="ex-item"><nobr>自分流で学習したものの、うまくいかず挫折。</nobr></li>
-                <li class="ex-item"><nobr>参考書が多すぎて、どれを買うべきか迷った。</nobr></li>
-                <li class="ex-item" style="list-style-type: none;"><nobr>などなど...</nobr></li>
-            </ul>
-        </div>
-        <div class="ex-img">
-            <img src="{% static 'img/study.png' %}" alt="勉強してる人" style="width: auto ; height: 140px ;">
-        </div>
-    </div>
+  <div class="header-ex d-flex w-100 justify-content-center mt-1">
+      <div class="ex-text mt-2 mr-5 font-weight-bold">
+          <ul class="ex-list pl-4 pt-2">
+              <li class="ex-item"><nobr>勉強を始めたはいいけど、何から進めていいか分からない。</nobr></li>
+              <li class="ex-item"><nobr>自分流で学習したものの、うまくいかず挫折。</nobr></li>
+              <li class="ex-item"><nobr>参考書が多すぎて、どれを買うべきか迷った。</nobr></li>
+              <li class="ex-item" style="list-style-type: none;"><nobr>などなど...</nobr></li>
+          </ul>
+      </div>
+      <div class="ex-img">
+          <img src="{% static 'img/study.png' %}" alt="勉強してる人" style="width: auto ; height: 140px ;">
+      </div>
+  </div>
+</div>
+<div class="mx-auto w-50" style="height: auto !important;">
+  
+  <div id="carousel" >
+    
+      <v-carousel :show-arrows="false" height="auto">
+        <v-carousel-item   v-for="(item,i) in items " :key="i">
+            <v-img class="mx-auto":src="item.src" style="width: 300px ; height: auto ;"></v-img>
+            <p class="mb-5">[[item.words]]</p>
+        </v-carousel-item>
+      </v-carousel>
+  </div>
 </div>
 
 <div class="middle w-75 mx-auto justify-content-center">
-    <div class="middle-title w-100 mt-5">
-        <p class="middle-text h3 font-weight-bold text-center mb-5 "><nobr>サービス内容</nobr></p>
-    </div>
-    <div class="row">
-        <div class="middle-img d-flex">
-            <div class="col-sm-12 col-md-4 col-lg-4 col-12">
-                <div class="img-list text-center">
-                    <p class="number mx-auto">1</p>
-                    <img src="{% static 'img/post.png' %}" alt="投稿" style="width: auto ; height: 140px ;">
-                    <p class="middle-caption mt-3">スコアアップにつ繋がった勉強法
-                        （勉強時間・場所・参考書・使い方
-                        ・克服箇所など）を投稿</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-4 col-lg-4 col-12">
-                <div class="img-list text-center">
-                    <p class="number mx-auto">2</p>
-                    <img src="{% static 'img/look.png' %}" alt="閲覧" style="width: auto ; height: 140px ;">
-                    <p class="middle-caption mt-3">投稿を閲覧し、勉強法や教材の閲覧、投稿のレビューに加えて、投稿者へ具体的な質問が可能</p>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-4 col-lg-4 col-12  ">
-                <div class="img-list text-center">
-                    <p class="number mx-auto">3</p>
-                    <img src="{% static 'img/asking.png' %}" alt="質問" style="width: auto ; height: 140px ;">
-                    <p class="middle-caption mt-3">質問部屋では、英語に関する全般的な質問・相談が可能。例）語法や文法、長文読解のコツ、TOEICの解き方など）</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="middle-title w-100 mt-5">
-        <a href="{% url 'study' %}">
-        <p class="middle-click font-weight-bold text-center mx-auto py-2"><nobr>さっそくみんなの勉強法を見てみる</nobr></p>
-        </a>
-    </div> 
+  <div class="middle-title w-100 mt-5">
+      <p class="middle-text h3 font-weight-bold text-center mb-5 "><nobr>サービス内容</nobr></p>
+  </div>
+  <div class="row">
+      <div class="middle-img d-flex">
+          <div class="col-sm-12 col-md-4 col-lg-4 col-12">
+              <div class="img-list text-center">
+                  <p class="number mx-auto">1</p>
+                  <img src="{% static 'img/post.png' %}" alt="投稿" style="width: auto ; height: 140px ;">
+                  <p class="middle-caption mt-3">スコアアップにつ繋がった勉強法
+                      （勉強時間・場所・参考書・使い方
+                      ・克服箇所など）を投稿</p>
+              </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-4 col-12">
+              <div class="img-list text-center">
+                  <p class="number mx-auto">2</p>
+                  <img src="{% static 'img/look.png' %}" alt="閲覧" style="width: auto ; height: 140px ;">
+                  <p class="middle-caption mt-3">投稿を閲覧し、勉強法や教材の閲覧、投稿のレビューに加えて、投稿者へ具体的な質問が可能</p>
+              </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-4 col-12  ">
+              <div class="img-list text-center">
+                  <p class="number mx-auto">3</p>
+                  <img src="{% static 'img/asking.png' %}" alt="質問" style="width: auto ; height: 140px ;">
+                  <p class="middle-caption mt-3">質問部屋では、英語に関する全般的な質問・相談が可能。例）語法や文法、長文読解のコツ、TOEICの解き方など）</p>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="middle-title w-100 mt-5">
+      <a href="{% url 'study' %}">
+      <p class="middle-click font-weight-bold text-center mx-auto py-2"><nobr>さっそくみんなの勉強法を見てみる</nobr></p>
+      </a>
+  </div> 
 </div>
+
+
 
 <div class="bottom-set w-75 mx-auto">
-    <p class="bottom-text text-center"><span class ="h4" style="color: #FFA500;">En-study</span>はTOEIC学習者がスコアアップを達成した勉強法・参考書などを共有し、TOEIC初学者・中級者がさらなるスコアアップを目指せるサービスです。</p>
-    
+  <p class="bottom-text text-center"><span class ="h4" style="color: #FFA500;">En-study</span>はTOEIC学習者がスコアアップを達成した勉強法・参考書などを共有し、TOEIC初学者・中級者がさらなるスコアアップを目指せるサービスです。</p>
+  
 </div>
 
-<div id="app">
-{{ text }}
-</div>
 
-{% render_bundle 'app' %}
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script>
+  new Vue({
+    el: '#carousel',
+    delimiters: ['[[', ']]'],
+    vuetify: new Vuetify(),
+    data () {
+      return{
+      items: [
+        
+          { src: 'static/img/post.png',  words: 'スコアアップにつ繋がった勉強法勉強時間・場所・参考書・使い方・克服箇所など）を投稿'},
 
+          { src: 'static/img/look.png', words: '投稿を閲覧し、勉強法や教材の閲覧、投稿のレビューに加えて、投稿者へ具体的な質問が可能'  } ,
 
-
-
+          { src: 'static/img/asking.png',  words: '質問部屋では、英語に関する全般的な質問・相談が可能。例）語法や文法、長文読解のコツ、TOEICの解き方など）'}, 
+        ]
+      }
+    },
+  })
+</script>
 
 {% endblock %}

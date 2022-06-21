@@ -21,6 +21,8 @@ from django.db.models import Q
 from functools import reduce
 from operator import and_
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from accounts.models import CustomUser
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 
@@ -28,6 +30,9 @@ class IndexView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'app/index.html', {
         })
+
+
+
 class TermsView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'app/terms.html', {
@@ -42,24 +47,23 @@ CommentForm = forms.modelform_factory(Comment, fields=('content', 'user' ,))
 class StudyView(generic.ListView):
     model = Post
     def get(self, request, *args, **kwargs):
-        post_data = Post.objects.order_by("-id")
+        posts = Post.objects.order_by("-id")
         rank_data = Post.objects.order_by("-like_num")
         ranking= rank_data[0:3]
-        paginator = Paginator(post_data, 5)
+        paginator = Paginator(posts, 5)
         page = request.GET.get('page', 1)
         try:
-            pages = paginator.page(page)
+            post_data = paginator.page(page)
         except PageNotAnInteger:
-            pages = paginator.page(1)
+            post_data = paginator.page(1)
         except EmptyPage:
-            pages = paginator.page(1)
+            post_data = paginator.page(1)
       
 
         return render(request, 'app/study.html', {
             'post_data': post_data,
             'rank_data': rank_data,
             'ranking':ranking,
-            'pages': pages
         }) 
 
 

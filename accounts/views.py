@@ -116,4 +116,3 @@ class SignupView(views.SignupView):
     def post(self, *args, **kwargs):
         return redirect('profile_edit.html')
 
-

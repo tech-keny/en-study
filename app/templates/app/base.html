@@ -1,5 +1,4 @@
 {% load static %}
-{% load render_bundle from webpack_loader %}
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -9,98 +8,161 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <script type="text/javascript" src="{% static 'js/app.js' %}"></script>
-    <script src="https://unpkg.com/vue@2.5.17"></script>
-
     
 
     <title>En-study（エンスタディ）</title>
 </head>
 
+
 <body>
-    <nav class="navbar navbar-expand  navbar-dark flex-column flex-lg-row bd-navbar" style="background-color: #FFA500;" >
-        <div class="d-flex col-lg-1">
-            <a href="#" class="navbar-brand">
-            <img src="{% static 'img/en-study.svg' %}" alt="logo" class="ml-2 mr-3">En-study for TOEIC 
-            </a>
+
+  <div id="app" >
+      <v-navigation-drawer app temporary  right   v-model="drawer" clipped class="w-25" >
+        <v-list-item>
+          <v-list-item-content>
+            {% if user.is_authenticated %}
+            <v-list-item-title class="text-h6 d-flex">
+              <v-avatar class="mr-5"><img src="{{ request.user.icon.url }}"  ></v-avatar>
+              <h4 class="mt-3">{{ request.user }}<span class="mr-1">さん</span></h4>
+            <v-btn icon  outlined large outlined @click="drawer=!drawer" class="ml-auto">✖</v-btn >
+            </v-list-item-title>
+            <v-list-item-subtitle class="ml-16">
+              <a  href="{% url 'profile_edit' %}" ><u>編集する</u></a>
+            </v-list-item-subtitle>
+          </v-list-item-content>
+          {% else %}
+          <v-list-item-title class="text-h6 d-flex">
+            <v-avatar class="mr-5"><img src="{% static 'img/user.png' %}" ></v-avatar>
+            <h4 class="mt-3">ゲスト<span class="mr-1">さん</span></h4>
+          <v-btn icon  outlined large outlined @click="drawer=!drawer" class="ml-auto">✖</v-btn >
+          </v-list-item-title>
+          <v-list-item-subtitle class="ml-16">
+            <a  href="{% url 'profile_edit' %}" ><u>編集する</u></a>
+          </v-list-item-subtitle>
+        </v-list-item-content>
+          {% endif %}
+        </v-list-item>
+        <v-divider ></v-divider>
+        <v-list dense nav>
+          <v-list-item>
+            <v-list-item-content class="d-flex">
+              <p>【TOEIC L&R 最高スコア】</p>
+              <p>{{ request.user.max_total }} 　(L:{{ request.user.max_listening}}　R: {{ request.user.max_reading }})</p>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item>
+            <v-list-item-content class="d-flex">
+              <p>【TOEIC L&R 初めてのスコア】</p>
+              <p>{{ request.user.first_total }}　(L:{{ request.user.first_listening}}　R: {{ request.user.first_reading }})</p>
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider></v-divider>
+          <v-list-item>
+            <v-list-item-content class="d-flex">
+              <p>【自己紹介】</p>
+              {{ request.user.content }} 
+            </v-list-item-content>
+          </v-list-item>
+          <v-divider></v-divider>
+        </v-list>
+        {% if user.is_authenticated %}
+        <v-btn href="{% url 'account_logout' %}">ログアウト</v-btn>
+        {% else %} 
+        <div class="d-flex">
+        <v-btn href="{% url 'account_login' %}">ログインする</v-btn>
+        <v-btn href="{% url 'account_signup' %}">新規登録する</v-btn>
         </div>
-        <div class="collapse navbar-collapse col-lg-11">
-            <ul class="navbar-nav ml-auto mr-5 flex-row">
-                    <li class="nav-item ml-5" >
-                        <a class="nav-link active" href="{% url 'index' %}">
-                            <div class="d-flex">
-                                <img src="{% static 'img/home.svg' %}" class="mr-3">
-                                <p class="pt-3"><nobr>ホーム</nobr></p>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="nav-item ml-5">
-                        <a class="nav-link active" href="{% url 'study' %}">
-                            <div class="d-flex">
-                                <img src="{% static 'img/people.svg' %}" class="mr-3">
-                                <p class="pt-3"><nobr>みんなの勉強法</nobr></p>
-                            </div>
-                        </a>
-                    </li>
-                    <li class="nav-item ml-5">
-                        <a class="nav-link active" href="{% url 'question' %}">
-                            <div class="d-flex">
-                                <img src="{% static 'img/question.svg' %}" class="mr-3">
-                                <p class="pt-3"><nobr>質問部屋</nobr></p>
-                            </div>
-                        </a>
-                    </li>
-            </ul>
-        </div>
-    </nav>
-
-
-
-<main>
-    <div class="container-fluid">
+        {% endif %}
+      </v-navigation-drawer>
+      <div class="mb-0">
+        <v-app-bar color="#80DEEA" app clipped-right>
+          <v-toolbar-title class="mr-auto"><a href="{% url 'index' %}"><span style="color:#00695C">En-study</span></a></v-toolbar-title>
+          <v-spacer></v-spacer> 
+          <v-toolbar-items >
+              <v-btn text color="#00695C"  href="{% url 'index' %}" class="font-weight-bold">ホーム</v-btn>
+              <v-btn text color="#00695C" href="{% url 'study' %}" class="font-weight-bold">みんなの勉強法</v-btn>
+              <v-btn text color="#00695C"  href="{% url 'question' %}" class="font-weight-bold">質問部屋 </v-btn>
+          </v-toolbar-items>
+          <v-app-bar-nav-icon  @click="drawer=!drawer" class="ml-auto"></v-app-bar-nav-icon>
+        </v-app-bar>
+      </div>  
+  </div>
+      <div class="container-fluid" style="margin-top: 100px; font-size: 20px; height: 100%;">
         {% block content %}
         {% endblock %}
-    </div>
-</main>
-
-
-
-<footer class="footer w-100">
-    <div class="row justify-content-center m-0 p-0">
-        <div class="footer-nav">
-            <ul class="footer-set my-0">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <li class="footer-item text-white" id="footer-logo"><img src="{% static 'img/en-study.svg' %}" alt="logo" class="ml-2 mr-3"><nobr>En-study for TOEIC</nobr></li>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <a href="{% url 'contact' %}">
-                            <li class="footer-item text-white"><nobr>お問い合わせ</nobr></li>
-                        </a>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <a href="{% url 'terms' %}">
-                            <li class="footer-item  text-white"><nobr>ご利用規約</nobr></li>
-                        </a>
-                    </div>
-                    <div class="col-sm-12 col-md-6 col-lg-3">
-                        <a href="{% url 'privacy' %}">
-                            <li class="footer-item text-white"><nobr>プライバシーポリシー</nobr></li>
-                        </a>
-                    </div>
-                </div>
-            </ul>
-        </div>
-    </div>
+      </div>
+      
+<footer class="footer w-100 mt-5">
+  <div class="row justify-content-center m-0 p-0">
+      <div class="footer-nav">
+          <ul class="footer-set my-0">
+              <div class="row">
+                  <div class="col-sm-12 col-md-6 col-lg-3">
+                      <li class="footer-item text-white" id="footer-logo"><img src="{% static 'img/en-study.svg' %}" alt="logo" class="ml-2 mr-3"><nobr><a href="#" style="list-style-type: none!important ;">En-study for TOEIC</a></nobr></li>
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-lg-3">
+                      <a href="{% url 'contact' %}">
+                          <li class="footer-item text-white"><nobr>お問い合わせ</nobr></li>
+                      </a>
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-lg-3">
+                      <a href="{% url 'terms' %}">
+                          <li class="footer-item  text-white"><nobr>ご利用規約</nobr></li>
+                      </a>
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-lg-3">
+                      <a href="{% url 'privacy' %}">
+                          <li class="footer-item text-white"><nobr>プライバシーポリシー</nobr></li>
+                      </a>
+                  </div>
+              </div>
+          </ul>
+      </div>
+  </div>
 </footer>
 <div class="copyright">
-    <p class="copyright-set mb-0">
-        <span class="copyright-mark align-text-bottom mr-1">©</span>2021 En-Study for TOEIC
-    </p>
+  <p class="copyright-set mb-0">
+      <span class="copyright-mark align-text-bottom mr-1">©</span>2021 En-Study for TOEIC
+  </p>
 </div>
 
 
+      
 
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    delimiters: ['[[', ']]'],
+    vuetify: new Vuetify(),
+    data(){
+    return{
+        drawer: false
+    }
+  }
+})  
+
+</script>
+
+<script>
+  new Vue({
+    el: '#footer',
+    delimiters: ['[[', ']]'],
+    vuetify: new Vuetify(),
+    data(){
+    return{
+        drawer: null
+    }
+  }
+})
+</script>
 
 </body>
 

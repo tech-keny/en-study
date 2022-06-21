@@ -1,14 +1,3 @@
-new Vue({
-  el:'#app',
-  data(){
-      return{
-          text:"hello world!"
-      };
-  }
-})
-
-
-
 function commentReplyToggle(parent_id) {
   const row = document.getElementById(parent_id);
   if (row.classList.contains('d-none')) {
